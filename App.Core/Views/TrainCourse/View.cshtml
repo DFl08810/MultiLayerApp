@@ -1,0 +1,173 @@
+﻿@model IEnumerable<App.Core.Models.CourseViewModel>
+
+@{
+    ViewData["Title"] = "CourseList";
+}
+
+@section ViewStyles {
+    <link rel="stylesheet" href="~/css/CourseList.css" />
+    <link rel="stylesheet" href="~/css/Universals.css" />
+}
+
+@section HeaderScripts {
+    <script type="text/javascript" src="~/js/MomentJS/moment.js"></script>
+}
+
+<h1>Terms List</h1>
+
+<div class="controls-container">
+    <button type="button" class="btn btn-blue-control" data-toggle="modal" data-target="#modal-addEntry">
+        Open modal
+    </button>
+</div>
+<div id="panel-entries-list">
+    @Html.AntiForgeryToken()
+    @foreach (var item in Model)
+    {
+        <div class="card">
+            <div class="card-header">
+                @*<div id="header-container">*@
+                <h4>@Html.DisplayFor(modelItem => item.FriendlyCourseDate)</h4>
+                <h4>@Html.DisplayFor(modelItem => item.CourseName)</h4>
+                @*</div>*@
+            </div>
+            <div class="card-body">
+                <div id="body-container">
+                    <div id="course-location">
+                        <h5>Location: @Html.DisplayFor(modelItem => item.CourseLocation)</h5>
+                    </div>
+                    <div id="course-description">
+                        @Html.DisplayFor(modelItem => item.CourseShortDescription)
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+
+                <div class="row" id="footer-controls">
+                    <div class="col-md-4">Course capacity: @Html.DisplayFor(modelItem => item.CourseCurrentCapacity)/@Html.DisplayFor(modelItem => item.CourseMaxCapacity)</div>
+                    <div class="col-md-4">Status: @Html.DisplayFor(modelItem => item.IsOpened)</div>
+                    <div class="col-md-4" id="controls">
+                        <span class="btn-control-group">
+                            <button id="@item.Id" type="button" class="btn btn-card-default" onclick=" GetCourseData(this.id)">Edit</button>
+                            <button id="@item.Id" type="button" class="btn btn-card-default" onclick="PerformDeleteAction(this.id)">Delete</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+
+<div class="modal" id="modal-addEntry">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">New Entry</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form asp-controller="TrainCourse" asp-action="Save" id="newEntry" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="container">
+                        <input type="hidden" class="form-control" id="itemId" name="itemId">
+                        <div class="row">
+                            <div class="col">
+                                <label for="yearSelector">Year:</label>
+                                <select name="yearSelector" id="yearSelector">
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="monthSelector">Month:</label>
+                                <select name="monthSelector" id="monthSelector">
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="daySelector">Day:</label>
+                                <select name="daySelector" id="daySelector">
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="hourSelector">Hour:</label>
+                                <select name="hourSelector" id="hourSelector">
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="minuteSelector">Minute:</label>
+                                <select name="minuteSelector" id="minuteSelector">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row inline-fields">
+                            <div class="labelDiv">
+                                <label for="location">Location:</label>
+                            </div>
+                            <div class="fieldDiv" id="locationField">
+                                <input type="text" class="form-control" id="location" placeholder="Location" name="location">
+                            </div>
+                        </div>
+
+                        <div class="row inline-fields">
+                            <div class="labelDiv">
+                                <label for="course-name">Name:</label>
+                            </div>
+                            <div class="fieldDiv" id="nameField">
+                                <input type="text" class="form-control" id="course-name" placeholder="Course name" name="course-name">
+                            </div>
+                        </div>
+
+
+                        <div class="row multiline-fields">
+                            <div class="labelDiv">
+                                <label for="description">Description:</label>
+                            </div>
+                            <div class="fieldDiv">
+                                <textarea type="text" class="form-control" id="description" name="description" rows="8"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row controlRow">
+                            <div class="col-md-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="isOpenedForRegistration" checked>
+                                    <label class="form-check-label" for="isOpenedForRegistration">
+                                        Open for registration
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-8 inline-fields">
+                                <div class="labelDiv">
+                                    <label for="location">Capacity:</label>
+                                </div>
+                                <div class="fieldDiv" id="capacityField">
+                                    <input type="number" class="form-control" id="maxCapacity" name="maxCapacity">
+                                </div>
+                            </div>
+                            <div class="col-md-2 submitBtn">
+                                <input onclick="SendDataToController()" id="modal-submit-btn" class="btn btn-form-submit" type="button" value="Save">
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript" src="~/js/CourseList/CourseList.js"></script>
+}

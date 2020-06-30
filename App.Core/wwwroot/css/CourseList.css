@@ -1,0 +1,115 @@
+﻿/*COLORS*/
+.card {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+    .card .card-header {
+        display: flex;
+        justify-content: space-between;
+        background-color: #0B2027;
+        color: white;
+    }
+
+    .card .card-footer #controls {
+        text-align: right;
+    }
+
+        .card .card-footer #controls .btn-control-group {
+            text-align: right;
+        }
+
+            .card .card-footer #controls .btn-control-group .btn-card-default {
+                width: 5rem;
+                border-radius: 0px;
+                background-color: #33658A;
+                color: white;
+            }
+
+                .card .card-footer #controls .btn-control-group .btn-card-default:hover {
+                    background-color: #40798C;
+                }
+
+.modal-dialog {
+    width: 90%;
+    max-width: 1138px;
+}
+
+    .modal-dialog .modal-body select {
+        width: 4rem;
+    }
+
+    .modal-dialog .modal-body .loading-container {
+        background-color: rgba(255, 255, 255, 0.7);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        vertical-align: middle;
+    }
+
+        .modal-dialog .modal-body .loading-container #loading-spinner {
+            display: block;
+            position: relative;
+            width: 4rem;
+            height: 4rem;
+            margin: auto;
+            top: 50%;
+            margin-bottom: 2rem;
+        }
+
+    .modal-dialog .modal-body .container .row {
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+
+    .modal-dialog .modal-body .container .controlRow {
+        margin-top: 25px;
+        margin-bottom: 0px;
+    }
+
+    .modal-dialog .modal-body .container .inline-fields {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-wrap: nowrap;
+    }
+
+    .modal-dialog .modal-body .container .fieldDiv {
+        width: 100%;
+    }
+
+    .modal-dialog .modal-body .container .labelDiv {
+        display: table-cell;
+        vertical-align: middle;
+        padding-right: 10px;
+    }
+
+        .modal-dialog .modal-body .container .labelDiv label {
+            font-weight: bold;
+            margin-bottom: .25rem;
+        }
+
+    .modal-dialog .modal-body .container .submitBtn {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: right;
+    }
+
+        .modal-dialog .modal-body .container .submitBtn .btn-form-submit {
+            width: 100%;
+            height: 100%;
+        }
+
+    .modal-dialog .modal-body .container #locationField {
+        margin-left: 1rem;
+    }
+
+    .modal-dialog .modal-body .container #nameField {
+        margin-left: 2.2rem;
+    }
+
+    .modal-dialog .modal-body .container #capacityField {
+        width: 15%;
+    }

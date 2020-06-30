@@ -1,0 +1,22 @@
+﻿.btn-blue-control {
+    border-radius: 0px;
+    background-color: #33658A;
+    color: white;
+}
+
+    .btn-blue-control:hover {
+        background-color: #40798C;
+        color: white;
+    }
+
+.btn-form-submit {
+    border-radius: 0px;
+    font-weight: bold;
+    background-color: #33658A;
+    color: white;
+}
+
+    .btn-form-submit:hover {
+        background-color: #40798C;
+        color: white;
+    }

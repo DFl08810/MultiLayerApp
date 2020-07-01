@@ -10,6 +10,8 @@ namespace App.Core.Data.Interfaces
         where K : class
     {
         IEnumerable<T> MapRangeUpwards(IEnumerable<K> modelRange);
-        IEnumerable<K> MapRangeDownwars(IEnumerable<T> modelRange);
+        IEnumerable<K> MapRangeDownwards(IEnumerable<T> modelRange);
+        T MapSingleUpwards(K singleModel);
+        K MapSingleDownwards(T singleModel);
     }
 }

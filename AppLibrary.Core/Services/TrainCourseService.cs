@@ -25,6 +25,12 @@ namespace AppLibrary.Core.Services
             return courseModelList;
         }
 
+        public int SaveRange(List<CourseModel> courseModels)
+        {
+
+            return 0;
+        }
+
         public IEnumerable<CourseDbModel> MapRangeDownwars(IEnumerable<CourseModel> modelRange)
         {
             var courseDbModelList = new List<CourseDbModel>();
@@ -73,6 +79,16 @@ namespace AppLibrary.Core.Services
             }
 
             return courseDbModelList;
+        }
+
+        public int Save(CourseModel saveCoureModel, bool forUpdate = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Save(IEnumerable<CourseModel> saveCoureModelList, bool forUpdate = false)
+        {
+            throw new NotImplementedException();
         }
     }
 }

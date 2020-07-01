@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Folder Include="Libraries\" />
+    <Folder Include="Data\" />
   </ItemGroup>
 
   <ItemGroup>

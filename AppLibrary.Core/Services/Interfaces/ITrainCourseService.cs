@@ -9,5 +9,7 @@ namespace AppLibrary.Core.Services.Interfaces
     public interface ITrainCourseService
     {
         IEnumerable<CourseModel> GetRange();
+        int Save(CourseModel saveCoureModel, bool forUpdate = false);
+        int Save(IEnumerable<CourseModel> saveCoureModelList, bool forUpdate = false);
     }
 }

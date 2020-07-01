@@ -11,25 +11,49 @@ namespace App.Core.Data
 {
     public class CourseDataMap : IViewModelMapper<CourseViewModel, CourseModel>
     {
-        public IEnumerable<CourseModel> MapRangeDownwars(IEnumerable<CourseViewModel> modelRange)
+        public CourseModel MapSingleDownwards(CourseViewModel singleModel)
+        {
+            var courseDbModel = new CourseModel
+            {
+                Id = singleModel.Id,
+                SystemCourseDate = singleModel.SystemCourseDate,
+                FriendlyCourseDate = singleModel.FriendlyCourseDate,
+                CourseName = singleModel.CourseName,
+                CourseLocation = singleModel.CourseLocation,
+                CourseShortDescription = singleModel.CourseShortDescription,
+                CourseCurrentCapacity = singleModel.CourseCurrentCapacity,
+                CourseMaxCapacity = singleModel.CourseMaxCapacity,
+                IsOpened = singleModel.IsOpened
+            };
+
+            return courseDbModel;
+        }
+
+        public CourseViewModel MapSingleUpwards(CourseModel singleModel)
+        {
+            var courseModel = new CourseViewModel
+            {
+                Id = singleModel.Id,
+                SystemCourseDate = singleModel.SystemCourseDate,
+                FriendlyCourseDate = singleModel.FriendlyCourseDate,
+                CourseName = singleModel.CourseName,
+                CourseLocation = singleModel.CourseLocation,
+                CourseShortDescription = singleModel.CourseShortDescription,
+                CourseCurrentCapacity = singleModel.CourseCurrentCapacity,
+                CourseMaxCapacity = singleModel.CourseMaxCapacity,
+                IsOpened = singleModel.IsOpened
+            };
+
+            return courseModel;
+        }
+
+        public IEnumerable<CourseModel> MapRangeDownwards(IEnumerable<CourseViewModel> modelRange)
         {
             var courseDbModelList = new List<CourseModel>();
 
             foreach (var courseModel in modelRange)
             {
-                var courseDbModel = new CourseModel
-                {
-                    Id = courseModel.Id,
-                    SystemCourseDate = courseModel.SystemCourseDate,
-                    FriendlyCourseDate = courseModel.FriendlyCourseDate,
-                    CourseName = courseModel.CourseName,
-                    CourseLocation = courseModel.CourseLocation,
-                    CourseShortDescription = courseModel.CourseShortDescription,
-                    CourseCurrentCapacity = courseModel.CourseCurrentCapacity,
-                    CourseMaxCapacity = courseModel.CourseMaxCapacity,
-                    IsOpened = courseModel.IsOpened
-                };
-
+                var courseDbModel = MapSingleDownwards(courseModel);
                 courseDbModelList.Add(courseDbModel);
             }
 
@@ -42,23 +66,12 @@ namespace App.Core.Data
 
             foreach (var courseDbModel in modelRange)
             {
-                var courseModel = new CourseViewModel
-                {
-                    Id = courseDbModel.Id,
-                    SystemCourseDate = courseDbModel.SystemCourseDate,
-                    FriendlyCourseDate = courseDbModel.FriendlyCourseDate,
-                    CourseName = courseDbModel.CourseName,
-                    CourseLocation = courseDbModel.CourseLocation,
-                    CourseShortDescription = courseDbModel.CourseShortDescription,
-                    CourseCurrentCapacity = courseDbModel.CourseCurrentCapacity,
-                    CourseMaxCapacity = courseDbModel.CourseMaxCapacity,
-                    IsOpened = courseDbModel.IsOpened
-                };
-
+                var courseModel = MapSingleUpwards(courseDbModel);
                 courseDbModelList.Add(courseModel);
             }
 
             return courseDbModelList;
         }
+
     }
 }

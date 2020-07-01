@@ -13,5 +13,8 @@ namespace AppLibrary.Core.Services.Interfaces
         int Save(IEnumerable<CourseModel> saveCourseModelList, bool forUpdate = false);
         CourseModel GetById(int objId);
 
+        int Delete(int saveObjId);
+        int Delete(IEnumerable<int> saveObjIdList);
+
     }
 }

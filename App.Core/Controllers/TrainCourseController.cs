@@ -97,8 +97,7 @@ namespace App.Core.Controllers
             #region DatabasAccess
             try
             {
-                var obj = _coursesData.Delete(objId);
-                _coursesData.Commint();
+                var obj = _trainCourseService.Delete(objId);
             }
             catch (Exception exc)
             {

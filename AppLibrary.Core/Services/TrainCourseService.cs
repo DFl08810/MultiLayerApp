@@ -20,6 +20,18 @@ namespace AppLibrary.Core.Services
             this._modelMapper = modelMapper;
         }
 
+        public int Delete(int saveObjId)
+        {
+            _courseDataAccess.Delete(saveObjId);
+            _courseDataAccess.Commint();
+            return 0;
+        }
+
+        public int Delete(IEnumerable<int> saveObjIdList)
+        {
+            throw new NotImplementedException();
+        }
+
         public CourseModel GetById(int objId)
         {
             var courseObj = _courseDataAccess.GetById(objId);

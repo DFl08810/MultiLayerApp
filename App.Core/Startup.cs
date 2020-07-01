@@ -4,7 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using App.Core.Data.Interfaces;
 using App.Core.Models;
+using AppLibrary.Core.Data.Interfaces;
 using AppLibrary.Core.Models;
+using AppLibrary.Core.Services;
+using AppLibrary.Core.Services.Interfaces;
 using DataAccess.Core;
 using DataAccess.Core.Models;
 using Microsoft.AspNetCore.Builder;
@@ -29,6 +32,7 @@ namespace App.Core
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>();
+            services.AddTransient<IModelMapper<CourseModel, CourseDbModel>, AppLibrary.Core.Data.TrainCourseDataMap>();
             services.AddTransient<DataAccess.Core.Interface.IDataAccess<CourseDbModel>, DataAccess.Core.DataAccess.TrainCourseDataAccess>();
             services.AddTransient<AppLibrary.Core.Services.Interfaces.ITrainCourseService, AppLibrary.Core.Services.TrainCourseService>();
             services.AddTransient<IViewModelMapper<CourseViewModel, CourseModel>, App.Core.Data.CourseDataMap>();

@@ -10,9 +10,13 @@ using AppLibrary.Core.Services;
 using AppLibrary.Core.Services.Interfaces;
 using DataAccess.Core;
 using DataAccess.Core.Models;
+using IdentityAuthLib.DataContext;
+using IdentityAuthLib.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -31,6 +35,13 @@ namespace App.Core
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region IdentityBlock
+            services.AddDbContext<IdentityDataContext>();
+            //services.AddDbContext<IdentityDataContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<IdentityDataContext>();
+            #endregion
             services.AddDbContext<DataContext>();
             services.AddTransient<IModelMapper<CourseModel, CourseDbModel>, AppLibrary.Core.Data.TrainCourseDataMap>();
             services.AddTransient<DataAccess.Core.Interface.IDataAccess<CourseDbModel>, DataAccess.Core.DataAccess.TrainCourseDataAccess>();

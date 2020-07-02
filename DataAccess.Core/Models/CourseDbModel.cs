@@ -7,6 +7,7 @@ namespace DataAccess.Core.Models
     public class CourseDbModel
     {
         public int Id { get; set; }
+        public string CreatedBy { get; set; }
         public DateTime SystemCourseDate { get; set; }
         public string FriendlyCourseDate { get; set; }
         public string CourseName { get; set; }

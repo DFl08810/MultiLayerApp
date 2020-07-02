@@ -1,4 +1,7 @@
-﻿@model IEnumerable<App.Core.Models.CourseViewModel>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityAuthLib.Models.User> SignInManager
+@inject UserManager<IdentityAuthLib.Models.User> UserManager
+@model IEnumerable<App.Core.Models.CourseViewModel>
 
 @{
     ViewData["Title"] = "CourseList";
@@ -11,6 +14,11 @@
 
 @section HeaderScripts {
     <script type="text/javascript" src="~/js/MomentJS/moment.js"></script>
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <input type="hidden" id="currentUser" value="@User.Identity.Name" />
 }
 
 <h1>Terms List</h1>

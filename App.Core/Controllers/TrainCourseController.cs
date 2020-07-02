@@ -8,10 +8,12 @@ using App.Core.Data.Interfaces;
 using App.Core.Models;
 using AppLibrary.Core.Models;
 using AppLibrary.Core.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App.Core.Controllers
 {
+    [Authorize]
     public class TrainCourseController : Controller
     {
         private readonly ITrainCourseService _trainCourseService;

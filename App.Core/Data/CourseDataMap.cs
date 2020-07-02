@@ -16,6 +16,7 @@ namespace App.Core.Data
             var courseDbModel = new CourseModel
             {
                 Id = singleModel.Id,
+                CreatedBy = singleModel.CreatedBy,
                 SystemCourseDate = singleModel.SystemCourseDate,
                 FriendlyCourseDate = singleModel.FriendlyCourseDate,
                 CourseName = singleModel.CourseName,
@@ -34,6 +35,7 @@ namespace App.Core.Data
             var courseModel = new CourseViewModel
             {
                 Id = singleModel.Id,
+                CreatedBy = singleModel.CreatedBy,
                 SystemCourseDate = singleModel.SystemCourseDate,
                 FriendlyCourseDate = singleModel.FriendlyCourseDate,
                 CourseName = singleModel.CourseName,

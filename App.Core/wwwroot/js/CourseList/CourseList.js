@@ -109,9 +109,13 @@ function SendDataToController() {
     var verificationToken = $('input[name="__RequestVerificationToken"]', $('#newEntry')).val();
     console.log(verificationToken);
 
+    var creatorUserName = $('#currentUser').val();
 
+    console.log('user: ');
+    console.log(creatorUserName);
 
     keyData = {
+        CreatedBy: creatorUserName,
         FriendlyCourseDate: selectedDateString,
         CourseName: courseName,
         CourseLocation: location,
@@ -281,10 +285,15 @@ function SendUpdateToController() {
     var verificationToken = $('input[name="__RequestVerificationToken"]', $('#newEntry')).val();
     console.log(verificationToken);
 
+    var creatorUserName = $('#currentUser').val();
+
+    console.log(creatorUserName);
+
     entityIdInt = parseInt(entityId, 10);
 
     keyData = {
         Id: entityIdInt,
+        CreatedBy: creatorUserName,
         FriendlyCourseDate: selectedDateString,
         CourseName: courseName,
         CourseLocation: location,

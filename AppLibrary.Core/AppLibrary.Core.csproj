@@ -5,12 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Libraries\" />
-    <Folder Include="Data\" />
+    <ProjectReference Include="..\DataAccess.Core\DataAccess.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataAccess.Core\DataAccess.Core.csproj" />
+    <Folder Include="Libraries\" />
   </ItemGroup>
 
 </Project>

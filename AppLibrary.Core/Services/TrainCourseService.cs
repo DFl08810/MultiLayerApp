@@ -1,4 +1,5 @@
-﻿using AppLibrary.Core.Models;
+﻿using AppLibrary.Core.Data.Interfaces;
+using AppLibrary.Core.Models;
 using AppLibrary.Core.Services.Interfaces;
 using DataAccess.Core.Interface;
 using DataAccess.Core.Models;
@@ -8,87 +9,75 @@ using System.Text;
 
 namespace AppLibrary.Core.Services
 {
-    public class TrainCourseService : ITrainCourseService, IModelMapper<CourseModel, CourseDbModel>
+    public class TrainCourseService : ITrainCourseService
     {
         private readonly IDataAccess<CourseDbModel> _courseDataAccess;
+        private readonly IModelMapper<CourseModel, CourseDbModel> _modelMapper;
 
-        public TrainCourseService(IDataAccess<CourseDbModel> courseDataAccess)
+        public TrainCourseService(IDataAccess<CourseDbModel> courseDataAccess, IModelMapper<CourseModel, CourseDbModel> modelMapper)
         {
             this._courseDataAccess = courseDataAccess;
+            this._modelMapper = modelMapper;
+        }
+
+        public int Delete(int saveObjId)
+        {
+            _courseDataAccess.Delete(saveObjId);
+            _courseDataAccess.Commint();
+            return 0;
+        }
+
+        public int Delete(IEnumerable<int> saveObjIdList)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CourseModel GetById(int objId)
+        {
+            var courseObj = _courseDataAccess.GetById(objId);
+            var bindedCourseObj = _modelMapper.MapSingleUpwards(courseObj);
+            return bindedCourseObj;
         }
 
         public IEnumerable<CourseModel> GetRange()
         {
             var courseDownrangeList = _courseDataAccess.GetRange();
-            var courseModelList = MapRangeUpwards(courseDownrangeList);
+            var courseModelList = _modelMapper.MapRangeUpwards(courseDownrangeList);
 
             return courseModelList;
         }
 
-        public int SaveRange(List<CourseModel> courseModels)
+        public int Save(CourseModel saveCourseModel, bool forUpdate = false)
         {
+            var courseDbModel = _modelMapper.MapSingleDownwards(saveCourseModel);
 
+            if (!forUpdate)
+            {
+                _courseDataAccess.Add(courseDbModel);
+            }
+            else
+            {
+                _courseDataAccess.Update(courseDbModel);
+            }
+
+            _courseDataAccess.Commint();
             return 0;
-        }
-
-        public IEnumerable<CourseDbModel> MapRangeDownwars(IEnumerable<CourseModel> modelRange)
-        {
-            var courseDbModelList = new List<CourseDbModel>();
-
-            foreach(var courseModel in modelRange)
-            {
-                var courseDbModel = new CourseDbModel
-                {
-                    Id = courseModel.Id,
-                    SystemCourseDate = courseModel.SystemCourseDate,
-                    FriendlyCourseDate = courseModel.FriendlyCourseDate,
-                    CourseName = courseModel.CourseName,
-                    CourseLocation = courseModel.CourseLocation,
-                    CourseShortDescription = courseModel.CourseShortDescription,
-                    CourseCurrentCapacity = courseModel.CourseCurrentCapacity,
-                    CourseMaxCapacity = courseModel.CourseMaxCapacity,
-                    IsOpened = courseModel.IsOpened
-                };
-
-                courseDbModelList.Add(courseDbModel);
-            }
-
-            return courseDbModelList;
-        }
-
-        public IEnumerable<CourseModel> MapRangeUpwards(IEnumerable<CourseDbModel> modelRange)
-        {
-            var courseDbModelList = new List<CourseModel>();
-
-            foreach (var courseDbModel in modelRange)
-            {
-                var courseModel = new CourseModel
-                {
-                    Id = courseDbModel.Id,
-                    SystemCourseDate = courseDbModel.SystemCourseDate,
-                    FriendlyCourseDate = courseDbModel.FriendlyCourseDate,
-                    CourseName = courseDbModel.CourseName,
-                    CourseLocation = courseDbModel.CourseLocation,
-                    CourseShortDescription = courseDbModel.CourseShortDescription,
-                    CourseCurrentCapacity = courseDbModel.CourseCurrentCapacity,
-                    CourseMaxCapacity = courseDbModel.CourseMaxCapacity,
-                    IsOpened = courseDbModel.IsOpened
-                };
-
-                courseDbModelList.Add(courseModel);
-            }
-
-            return courseDbModelList;
-        }
-
-        public int Save(CourseModel saveCoureModel, bool forUpdate = false)
-        {
-            throw new NotImplementedException();
         }
 
         public int Save(IEnumerable<CourseModel> saveCoureModelList, bool forUpdate = false)
         {
-            throw new NotImplementedException();
+            var courseDbModels = _modelMapper.MapRangeDownwards(saveCoureModelList);
+
+            if (forUpdate)
+            {
+
+            }
+            else
+            {
+
+            }
+
+            return 0;
         }
     }
 }

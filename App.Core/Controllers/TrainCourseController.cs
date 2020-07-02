@@ -8,7 +8,9 @@ using App.Core.Data.Interfaces;
 using App.Core.Models;
 using AppLibrary.Core.Models;
 using AppLibrary.Core.Services.Interfaces;
+using IdentityAuthLib.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App.Core.Controllers
@@ -18,11 +20,15 @@ namespace App.Core.Controllers
     {
         private readonly ITrainCourseService _trainCourseService;
         private readonly IViewModelMapper<CourseViewModel, CourseModel> _modelMapper;
+        private readonly UserManager<User> _userManager;
 
-        public TrainCourseController(ITrainCourseService trainCourseService, IViewModelMapper<CourseViewModel, CourseModel> modelMapper)
+        public TrainCourseController(ITrainCourseService trainCourseService,
+                                    IViewModelMapper<CourseViewModel, CourseModel> modelMapper,
+                                    UserManager<IdentityAuthLib.Models.User> userManager)
         {
             this._trainCourseService = trainCourseService;
             this._modelMapper = modelMapper;
+            this._userManager = userManager;
         }
 
         public IActionResult Index()
@@ -33,9 +39,10 @@ namespace App.Core.Controllers
             return View(trainCourseMapped);
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Save([FromBody] CourseViewModel data)
+        public async Task<IActionResult> Save([FromBody] CourseViewModel data)
         {
             if (data == null)
             {
@@ -61,6 +68,8 @@ namespace App.Core.Controllers
             #region DatabaseAccess
             try
             {
+                var AuthorizedUser = await _userManager.GetUserAsync(User);
+                data.CreatedBy = AuthorizedUser.UserName;
                 var courseData = _modelMapper.MapSingleDownwards(data);
                 _trainCourseService.Save(courseData);
                 //var courseData = _coursesService.BindCoursesModelToData(data);

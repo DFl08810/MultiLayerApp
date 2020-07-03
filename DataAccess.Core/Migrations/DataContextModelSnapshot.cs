@@ -57,6 +57,36 @@ namespace DataAccess.Core.Migrations
 
                     b.ToTable("CoursesEntries");
                 });
+
+            modelBuilder.Entity("DataAccess.Core.Models.UserActionDbModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuthSystemIdentity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("UserActionEntries");
+                });
+
+            modelBuilder.Entity("DataAccess.Core.Models.UserActionDbModel", b =>
+                {
+                    b.HasOne("DataAccess.Core.Models.CourseDbModel", "Course")
+                        .WithMany("UserActionModel")
+                        .HasForeignKey("CourseId");
+                });
 #pragma warning restore 612, 618
         }
     }

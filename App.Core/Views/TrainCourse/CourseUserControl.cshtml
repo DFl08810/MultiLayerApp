@@ -1,0 +1,55 @@
+﻿@model IEnumerable<App.Core.Models.CourseViewModel>
+
+@{
+    ViewData["Title"] = "CourseUserControl";
+}
+
+@Html.AntiForgeryToken()
+
+@section ViewStyles {
+    <link rel="stylesheet" href="~/css/CourseList.css" />
+    <link rel="stylesheet" href="~/css/Universals.css" />
+}
+
+<h1>CourseUserControl</h1>
+
+<div id="panel-entries-list">
+    @foreach (var item in Model)
+    {
+        <div class="card">
+            <div class="card-header">
+                @*<div id="header-container">*@
+                <h4>@Html.DisplayFor(modelItem => item.FriendlyCourseDate)</h4>
+                <h4>@Html.DisplayFor(modelItem => item.CourseName)</h4>
+                <h4>@Html.DisplayFor(modelItem => item.CreatedBy)</h4>
+                @*</div>*@
+            </div>
+            <div class="card-body">
+                <div id="body-container">
+                    <div id="course-location">
+                        <h5>Location: @Html.DisplayFor(modelItem => item.CourseLocation)</h5>
+                    </div>
+                    <div id="course-description">
+                        @Html.DisplayFor(modelItem => item.CourseShortDescription)
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+
+                <div class="row" id="footer-controls">
+                    <div class="col-md-4">Course capacity: @Html.DisplayFor(modelItem => item.CourseCurrentCapacity)/@Html.DisplayFor(modelItem => item.CourseMaxCapacity)</div>
+                    <div class="col-md-4">Status: @Html.DisplayFor(modelItem => item.IsOpened)</div>
+                    <div class="col-md-4" id="controls">
+                        <span class="btn-control-group">
+                            <button id="@item.Id" type="button" class="btn btn-card-default" onclick="PerformSignonAction(this.id)">Sign on</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="~/js/CourseList/CourseList.js"></script>
+}

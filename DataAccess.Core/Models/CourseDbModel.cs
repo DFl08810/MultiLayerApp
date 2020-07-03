@@ -16,5 +16,6 @@ namespace DataAccess.Core.Models
         public int CourseCurrentCapacity { get; set; }
         public int CourseMaxCapacity { get; set; }
         public bool IsOpened { get; set; }
+        public ICollection<UserActionDbModel> UserActionModel { get; set; }
     }
 }

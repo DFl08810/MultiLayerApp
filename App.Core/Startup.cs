@@ -48,6 +48,7 @@ namespace App.Core
             services.AddTransient<DataAccess.Core.Interface.IDataAccess<CourseDbModel>, DataAccess.Core.DataAccess.TrainCourseDataAccess>();
             services.AddTransient<AppLibrary.Core.Services.Interfaces.ITrainCourseService, AppLibrary.Core.Services.TrainCourseService>();
             services.AddTransient<IViewModelMapper<CourseViewModel, CourseModel>, App.Core.Data.CourseDataMap>();
+            services.AddTransient<IModelMapper<UserActionModel, UserActionDbModel>, AppLibrary.Core.Data.UserActionDataMap>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

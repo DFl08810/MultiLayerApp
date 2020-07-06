@@ -16,6 +16,6 @@ namespace AppLibrary.Core.Models
         public int CourseCurrentCapacity { get; set; }
         public int CourseMaxCapacity { get; set; }
         public bool IsOpened { get; set; }
-        public ICollection<UserActionModel> UserActionModel { get; set; }
+        public IEnumerable<UserActionModel> UserActionModel { get; set; }
     }
 }

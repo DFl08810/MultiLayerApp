@@ -13,11 +13,15 @@ namespace AppLibrary.Core.Services
     {
         private readonly IDataAccess<CourseDbModel> _courseDataAccess;
         private readonly IModelMapper<CourseModel, CourseDbModel> _modelMapper;
+        private readonly IModelMapper<UserActionModel, UserActionDbModel> _userMapper;
 
-        public TrainCourseService(IDataAccess<CourseDbModel> courseDataAccess, IModelMapper<CourseModel, CourseDbModel> modelMapper)
+        public TrainCourseService(IDataAccess<CourseDbModel> courseDataAccess,
+                                  IModelMapper<CourseModel, CourseDbModel> modelMapper,
+                                  IModelMapper<UserActionModel, UserActionDbModel> userMapper)
         {
             this._courseDataAccess = courseDataAccess;
             this._modelMapper = modelMapper;
+            this._userMapper = userMapper;
         }
 
         public int Delete(int saveObjId)
@@ -47,9 +51,17 @@ namespace AppLibrary.Core.Services
             return courseModelList;
         }
 
-        public int Save(CourseModel saveCourseModel, bool forUpdate = false)
+        public int Save(CourseModel saveCourseModel, UserActionModel userActionModel, bool forUpdate = false)
         {
+
             var courseDbModel = _modelMapper.MapSingleDownwards(saveCourseModel);
+
+            var courseActionList = new List<UserActionModel>();
+            courseActionList.Add(userActionModel);
+
+            var userAction = _userMapper.MapRangeDownwards(courseActionList);
+
+            courseDbModel.UserActionModel = userAction;
 
             if (!forUpdate)
             {
@@ -64,9 +76,9 @@ namespace AppLibrary.Core.Services
             return 0;
         }
 
-        public int Save(IEnumerable<CourseModel> saveCoureModelList, bool forUpdate = false)
+        public int Save(IEnumerable<CourseModel> saveCourseModelList, bool forUpdate = false)
         {
-            var courseDbModels = _modelMapper.MapRangeDownwards(saveCoureModelList);
+            var courseDbModels = _modelMapper.MapRangeDownwards(saveCourseModelList);
 
             if (forUpdate)
             {

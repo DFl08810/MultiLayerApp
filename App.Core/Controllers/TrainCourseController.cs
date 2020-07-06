@@ -72,7 +72,10 @@ namespace App.Core.Controllers
                 var AuthorizedUser = await _userManager.GetUserAsync(User);
                 data.CreatedBy = AuthorizedUser.UserName;
                 var courseData = _modelMapper.MapSingleDownwards(data);
-                _trainCourseService.Save(courseData);
+
+                var UserAction = new UserActionModel() { UserName = data.CreatedBy, AuthSystemIdentity = AuthorizedUser.Id };
+
+                _trainCourseService.Save(courseData, UserAction);
                 //var courseData = _coursesService.BindCoursesModelToData(data);
                 //courseData = _coursesData.Add(courseData);
                 //_coursesData.Commint();
@@ -155,8 +158,11 @@ namespace App.Core.Controllers
             #region DatabaseAccess
             try
             {
+
+                var UserAction = new UserActionModel() { UserName = "test", AuthSystemIdentity = "full" };
+
                 var bindedCourseData = _modelMapper.MapSingleDownwards(data);
-                _trainCourseService.Save(bindedCourseData, true);
+                _trainCourseService.Save(bindedCourseData, UserAction,true);
                 //var courseData = _coursesService.BindCoursesModelToData(data);
                 //courseData = _coursesData.Update(courseData);
                 //_coursesData.Commint();

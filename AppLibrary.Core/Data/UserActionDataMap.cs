@@ -42,7 +42,7 @@ namespace AppLibrary.Core.Data
             var courseDbModel = new UserActionDbModel
             {
                 Id = singleModel.Id,
-                Course = singleModel.Course,
+                //Course = singleModel.Course,
                 AuthSystemIdentity = singleModel.AuthSystemIdentity,
                 UserName = singleModel.UserName
             };
@@ -55,15 +55,9 @@ namespace AppLibrary.Core.Data
             var courseModel = new UserActionModel
             {
                 Id = singleModel.Id,
-                CreatedBy = singleModel.CreatedBy,
-                SystemCourseDate = singleModel.SystemCourseDate,
-                FriendlyCourseDate = singleModel.FriendlyCourseDate,
-                CourseName = singleModel.CourseName,
-                CourseLocation = singleModel.CourseLocation,
-                CourseShortDescription = singleModel.CourseShortDescription,
-                CourseCurrentCapacity = singleModel.CourseCurrentCapacity,
-                CourseMaxCapacity = singleModel.CourseMaxCapacity,
-                IsOpened = singleModel.IsOpened
+                //Course = singleModel.Course,
+                AuthSystemIdentity = singleModel.AuthSystemIdentity,
+                UserName = singleModel.UserName
             };
 
             return courseModel;

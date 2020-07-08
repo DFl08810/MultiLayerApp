@@ -5,6 +5,7 @@ using DataAccess.Core.Interface;
 using DataAccess.Core.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace AppLibrary.Core.Factories
@@ -28,8 +29,12 @@ namespace AppLibrary.Core.Factories
             //var mappedCourseObjects = _modelMapper.MapSingleDownwards(courseObject);
             var mappedUserActions = _userMapper.MapRangeDownwards(userActions);
 
+            var oldUserActions = courseObject.UserActionModel.ToList();
+            oldUserActions.AddRange(mappedUserActions);
 
-            throw new NotImplementedException();
+            courseObject.UserActionModel = oldUserActions;
+
+            return courseObject;
         }
     }
 }

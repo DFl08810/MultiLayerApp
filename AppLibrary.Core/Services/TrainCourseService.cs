@@ -1,4 +1,5 @@
 ﻿using AppLibrary.Core.Data.Interfaces;
+using AppLibrary.Core.Factories.Interfaces;
 using AppLibrary.Core.Models;
 using AppLibrary.Core.Services.Interfaces;
 using DataAccess.Core.Interface;
@@ -15,14 +16,17 @@ namespace AppLibrary.Core.Services
         private readonly IDataAccess<CourseDbModel> _courseDataAccess;
         private readonly IModelMapper<CourseModel, CourseDbModel> _modelMapper;
         private readonly IModelMapper<UserActionModel, UserActionDbModel> _userMapper;
+        private readonly ITrainCalendarFactory _trainCalFactory;
 
         public TrainCourseService(IDataAccess<CourseDbModel> courseDataAccess,
                                   IModelMapper<CourseModel, CourseDbModel> modelMapper,
-                                  IModelMapper<UserActionModel, UserActionDbModel> userMapper)
+                                  IModelMapper<UserActionModel, UserActionDbModel> userMapper,
+                                  ITrainCalendarFactory trainCalendarFactory)
         {
             this._courseDataAccess = courseDataAccess;
             this._modelMapper = modelMapper;
             this._userMapper = userMapper;
+            this._trainCalFactory = trainCalendarFactory;
         }
 
         public int Delete(int saveObjId)
@@ -57,22 +61,15 @@ namespace AppLibrary.Core.Services
 
             var courseDbModel = _modelMapper.MapSingleDownwards(saveCourseModel);
 
-            var courseDbModels = _courseDataAccess.GetCombinedList(saveCourseModel.Id);
-            courseDbModel = courseDbModels.FirstOrDefault();
+            
 
 
             var courseActionList = new List<UserActionModel>();
-            //courseActionList.Add(userActionModel);
             courseActionList.Add(userActionModel);
 
-            var userAction = _userMapper.MapRangeDownwards(courseActionList);
+            //courseDbModel = _trainCalFactory.ConstructCourseForUpdate(courseDbModel, courseActionList);
 
-            var userlist = courseDbModel.UserActionModel.ToList();
-            userlist.AddRange(userAction);
-
-            //userAction.Append(courseDbModel.UserActionModel.FirstOrDefault());
-
-            courseDbModel.UserActionModel = userlist;
+            
             
 
             if (!forUpdate)
@@ -81,6 +78,9 @@ namespace AppLibrary.Core.Services
             }
             else
             {
+                var courseDbModels = _courseDataAccess.GetCombinedList(saveCourseModel.Id);
+                courseDbModel = courseDbModels.FirstOrDefault();
+                courseDbModel = _trainCalFactory.ConstructCourseForUpdate(courseDbModel, courseActionList);
                 _courseDataAccess.Update(courseDbModel);
             }
 

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Core.DataAccess
 {
@@ -55,7 +56,8 @@ namespace DataAccess.Core.DataAccess
 
         public IEnumerable<CourseDbModel> GetCombinedList(int id)
         {
-            throw new NotImplementedException();
+            List<CourseDbModel> coursesList = db.CoursesEntries.Where(ts => ts.Id == id).Include(x => x.UserActionModel).ToList();
+            return coursesList;
         }
 
         public int GetCountOf()

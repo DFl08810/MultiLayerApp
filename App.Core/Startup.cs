@@ -46,7 +46,9 @@ namespace App.Core
             services.AddDbContext<DataContext>();
             services.AddTransient<IModelMapper<CourseModel, CourseDbModel>, AppLibrary.Core.Data.TrainCourseDataMap>();
             services.AddTransient<DataAccess.Core.Interface.IDataAccess<CourseDbModel>, DataAccess.Core.DataAccess.TrainCourseDataAccess>();
+            services.AddTransient<DataAccess.Core.Interface.IDataAccess<UserActionDbModel>, DataAccess.Core.DataAccess.UserActionDataAccess>();
             services.AddTransient<AppLibrary.Core.Services.Interfaces.ITrainCourseService, AppLibrary.Core.Services.TrainCourseService>();
+            services.AddTransient<AppLibrary.Core.Services.Interfaces.IUserActionService, AppLibrary.Core.Services.UserActionService>();
             services.AddTransient<IViewModelMapper<CourseViewModel, CourseModel>, App.Core.Data.CourseDataMap>();
             services.AddTransient<IModelMapper<UserActionModel, UserActionDbModel>, AppLibrary.Core.Data.UserActionDataMap>();
             services.AddControllersWithViews();

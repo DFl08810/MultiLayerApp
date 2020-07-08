@@ -5,6 +5,7 @@ using DataAccess.Core.Interface;
 using DataAccess.Core.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace AppLibrary.Core.Services
@@ -56,12 +57,23 @@ namespace AppLibrary.Core.Services
 
             var courseDbModel = _modelMapper.MapSingleDownwards(saveCourseModel);
 
+            var courseDbModels = _courseDataAccess.GetCombinedList(saveCourseModel.Id);
+            courseDbModel = courseDbModels.FirstOrDefault();
+
+
             var courseActionList = new List<UserActionModel>();
+            //courseActionList.Add(userActionModel);
             courseActionList.Add(userActionModel);
 
             var userAction = _userMapper.MapRangeDownwards(courseActionList);
 
-            courseDbModel.UserActionModel = userAction;
+            var userlist = courseDbModel.UserActionModel.ToList();
+            userlist.AddRange(userAction);
+
+            //userAction.Append(courseDbModel.UserActionModel.FirstOrDefault());
+
+            courseDbModel.UserActionModel = userlist;
+            
 
             if (!forUpdate)
             {

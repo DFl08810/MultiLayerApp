@@ -19,14 +19,17 @@ namespace App.Core.Controllers
     public class TrainCourseController : Controller
     {
         private readonly ITrainCourseService _trainCourseService;
+        private readonly IUserActionService _userActionService;
         private readonly IViewModelMapper<CourseViewModel, CourseModel> _modelMapper;
         private readonly UserManager<User> _userManager;
 
         public TrainCourseController(ITrainCourseService trainCourseService,
+                                    IUserActionService userActionService,
                                     IViewModelMapper<CourseViewModel, CourseModel> modelMapper,
                                     UserManager<IdentityAuthLib.Models.User> userManager)
         {
             this._trainCourseService = trainCourseService;
+            this._userActionService = userActionService;
             this._modelMapper = modelMapper;
             this._userManager = userManager;
         }
@@ -186,6 +189,20 @@ namespace App.Core.Controllers
             return View(trainCourseMapped);
         }
 
+        [HttpGet]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> SignUserToTerm(int objId)
+        {
+            var AuthorizedUser = await _userManager.GetUserAsync(User);
+
+            var courseModel = _trainCourseService.GetById(objId);
+
+            var UserAction = new UserActionModel() { UserName = AuthorizedUser.UserName, AuthSystemIdentity = AuthorizedUser.Id, Course = courseModel };
+
+            //_userActionService.Save(UserAction);
+            _trainCourseService.Save(courseModel, UserAction, true);
+            return StatusCode(200);
+        }
 
     }
 }

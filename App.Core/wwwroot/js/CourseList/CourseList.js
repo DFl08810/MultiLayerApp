@@ -243,6 +243,24 @@ function GetCourseData(itemId) {
     });
 }
 
+function PerformSignonAction(itemId) {
+    ChangeModalValues(true);
+    var data = { objId: itemId };
+    var dataType = 'application/x-www-form-urlencoded';
+    $.ajax({
+        type: 'GET',
+        url: '/TrainCourse/SignUserToTerm',
+        contentType: dataType,
+        data: data,
+        success: function (result) {
+            console.log('Data received: ');
+            console.log(result);
+            console.log(result.CourseLocation);
+            FillForm(result);
+        }
+    });
+}
+
 function ChangeModalValues(IsUpdateOrNew) {
     $("#modal-submit-btn", $("#modal-addEntry")).attr("onclick", "SendUpdateToController()");
 }

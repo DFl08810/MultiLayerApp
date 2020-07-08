@@ -56,7 +56,7 @@ namespace AppLibrary.Core.Services
             return courseModelList;
         }
 
-        public int Save(CourseModel saveCourseModel, UserActionModel userActionModel, bool forUpdate = false)
+        public int Save(CourseModel saveCourseModel, UserActionModel userActionModel, bool forUpdate = false, bool updateRelated = false)
         {
 
             var courseDbModel = _modelMapper.MapSingleDownwards(saveCourseModel);
@@ -69,8 +69,13 @@ namespace AppLibrary.Core.Services
 
             //courseDbModel = _trainCalFactory.ConstructCourseForUpdate(courseDbModel, courseActionList);
 
-            
-            
+            if (updateRelated)
+            {
+                var courseDbModels = _courseDataAccess.GetCombinedList(saveCourseModel.Id);
+                courseDbModel = courseDbModels.FirstOrDefault();
+                courseDbModel = _trainCalFactory.ConstructCourseForUpdate(courseDbModel, courseActionList);
+            }
+
 
             if (!forUpdate)
             {
@@ -78,9 +83,6 @@ namespace AppLibrary.Core.Services
             }
             else
             {
-                var courseDbModels = _courseDataAccess.GetCombinedList(saveCourseModel.Id);
-                courseDbModel = courseDbModels.FirstOrDefault();
-                courseDbModel = _trainCalFactory.ConstructCourseForUpdate(courseDbModel, courseActionList);
                 _courseDataAccess.Update(courseDbModel);
             }
 

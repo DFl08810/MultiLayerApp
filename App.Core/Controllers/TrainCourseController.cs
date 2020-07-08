@@ -199,8 +199,7 @@ namespace App.Core.Controllers
 
             var UserAction = new UserActionModel() { UserName = AuthorizedUser.UserName, AuthSystemIdentity = AuthorizedUser.Id, Course = courseModel };
 
-            //_userActionService.Save(UserAction);
-            _trainCourseService.Save(courseModel, UserAction, true);
+            _trainCourseService.Save(courseModel, UserAction, true, true);
             return StatusCode(200);
         }
 

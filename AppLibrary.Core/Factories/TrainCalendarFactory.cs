@@ -34,6 +34,8 @@ namespace AppLibrary.Core.Factories
 
             courseObject.UserActionModel = oldUserActions;
 
+            courseObject.CourseCurrentCapacity = courseObject.UserActionModel.Count();
+
             return courseObject;
         }
 
@@ -49,6 +51,7 @@ namespace AppLibrary.Core.Factories
                 {
                     courseMapped.UserActionModel = _userMapper.MapRangeUpwards(item.UserActionModel);
                 }
+
 
                 outputList.Add(courseMapped);
             }

@@ -61,9 +61,6 @@ namespace AppLibrary.Core.Services
 
             var courseDbModel = _modelMapper.MapSingleDownwards(saveCourseModel);
 
-            
-
-
             var courseActionList = new List<UserActionModel>();
             courseActionList.Add(userActionModel);
 

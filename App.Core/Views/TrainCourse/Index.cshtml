@@ -48,6 +48,12 @@
                     <div id="course-description">
                         @Html.DisplayFor(modelItem => item.CourseShortDescription)
                     </div>
+                    <ul>
+                        @foreach(var user in item.SignedUsers)
+                        {
+                            <li>@Html.DisplayFor(signedUser => user.UserName)</li>
+                        }
+                    </ul>
                 </div>
             </div>
             <div class="card-footer">

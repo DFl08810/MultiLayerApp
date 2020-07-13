@@ -12,6 +12,7 @@ using IdentityAuthLib.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Razor.Language;
 
 namespace App.Core.Controllers
 {
@@ -21,16 +22,19 @@ namespace App.Core.Controllers
         private readonly ITrainCourseService _trainCourseService;
         private readonly IUserActionService _userActionService;
         private readonly IViewModelMapper<CourseViewModel, CourseModel> _modelMapper;
+        private readonly IViewModelMapper<UserViewModel, UserActionModel> _userMapper;
         private readonly UserManager<User> _userManager;
 
         public TrainCourseController(ITrainCourseService trainCourseService,
                                     IUserActionService userActionService,
                                     IViewModelMapper<CourseViewModel, CourseModel> modelMapper,
+                                    IViewModelMapper<UserViewModel, UserActionModel> userMapper,
                                     UserManager<IdentityAuthLib.Models.User> userManager)
         {
             this._trainCourseService = trainCourseService;
             this._userActionService = userActionService;
             this._modelMapper = modelMapper;
+            this._userMapper = userMapper;
             this._userManager = userManager;
         }
 
@@ -38,9 +42,21 @@ namespace App.Core.Controllers
         public IActionResult Index()
         {
             var trainCourseList = _trainCourseService.GetRange();
+            var trainCoursesMapped = new List<CourseViewModel>();
             //var trainBindedList = _dataMap.MapRangeUpwards(trainCourseList);
-            var trainCourseMapped = _modelMapper.MapRangeUpwards(trainCourseList);
-            return View(trainCourseMapped);
+            //var trainCourseMapped = _modelMapper.MapRangeUpwards(trainCourseList);
+            foreach (var item in trainCourseList)
+            {
+                var viewModel = new CourseViewModel();
+                viewModel = _modelMapper.MapSingleUpwards(item);
+                if (item.UserActionModel != null)
+                {
+                    viewModel.SignedUsers = _userMapper.MapRangeUpwards(item.UserActionModel).ToList();
+                }
+                trainCoursesMapped.Add(viewModel);
+            }
+
+            return View(trainCoursesMapped);
         }
 
 

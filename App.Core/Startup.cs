@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Core.Data;
 using App.Core.Data.Interfaces;
 using App.Core.Models;
 using AppLibrary.Core.Data.Interfaces;
@@ -53,6 +54,7 @@ namespace App.Core
             services.AddTransient<AppLibrary.Core.Services.Interfaces.IUserActionService, AppLibrary.Core.Services.UserActionService>();
             services.AddTransient<IViewModelMapper<CourseViewModel, CourseModel>, App.Core.Data.CourseDataMap>();
             services.AddTransient<IModelMapper<UserActionModel, UserActionDbModel>, AppLibrary.Core.Data.UserActionDataMap>();
+            services.AddTransient<IViewModelMapper<UserViewModel, UserActionModel>, UserViewModelMap>();
             services.AddTransient<ITrainCalendarFactory, TrainCalendarFactory>();
             services.AddControllersWithViews();
             services.AddRazorPages();

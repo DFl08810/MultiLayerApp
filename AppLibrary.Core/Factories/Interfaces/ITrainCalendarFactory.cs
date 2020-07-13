@@ -9,5 +9,6 @@ namespace AppLibrary.Core.Factories.Interfaces
     public interface ITrainCalendarFactory
     {
         CourseDbModel ConstructCourseForUpdate(CourseDbModel courseObject, List<UserActionModel> userActions);
+        IEnumerable<CourseModel> CreateFullCourseList(IEnumerable<CourseDbModel> courseList);
     }
 }

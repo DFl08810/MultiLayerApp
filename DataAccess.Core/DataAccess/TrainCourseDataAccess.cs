@@ -67,7 +67,7 @@ namespace DataAccess.Core.DataAccess
 
         public IEnumerable<CourseDbModel> GetRange()
         {
-            return db.CoursesEntries;
+            return db.CoursesEntries.Include(x => x.UserActionModel).ToList();
         }
 
         public CourseDbModel Update(CourseDbModel updateObj)

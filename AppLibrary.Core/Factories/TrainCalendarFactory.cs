@@ -36,5 +36,24 @@ namespace AppLibrary.Core.Factories
 
             return courseObject;
         }
+
+        public IEnumerable<CourseModel> CreateFullCourseList(IEnumerable<CourseDbModel> courseList)
+        {
+            var outputList = new List<CourseModel>();
+            
+            foreach (var item in courseList)
+            {
+                var courseMapped = new CourseModel();
+                courseMapped = _modelMapper.MapSingleUpwards(item);
+                if(item.UserActionModel != null)
+                {
+                    courseMapped.UserActionModel = _userMapper.MapRangeUpwards(item.UserActionModel);
+                }
+
+                outputList.Add(courseMapped);
+            }
+
+            return outputList;
+        }
     }
 }

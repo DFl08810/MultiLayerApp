@@ -51,8 +51,8 @@ namespace AppLibrary.Core.Services
         public IEnumerable<CourseModel> GetRange()
         {
             var courseDownrangeList = _courseDataAccess.GetRange();
-            var courseModelList = _modelMapper.MapRangeUpwards(courseDownrangeList);
-
+            //var courseModelList = _modelMapper.MapRangeUpwards(courseDownrangeList);
+            var courseModelList = _trainCalFactory.CreateFullCourseList(courseDownrangeList);
             return courseModelList;
         }
 

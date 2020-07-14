@@ -7,6 +7,7 @@ using DataAccess.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace AppLibrary.Core.Services
@@ -70,9 +71,16 @@ namespace AppLibrary.Core.Services
             {
                 var courseDbModels = _courseDataAccess.GetCombinedList(saveCourseModel.Id);
                 courseDbModel = courseDbModels.FirstOrDefault();
-                courseDbModel = _trainCalFactory.ConstructCourseForUpdate(courseDbModel, courseActionList);
+                var testResult = courseDbModel.UserActionModel.FirstOrDefault(search => search.UserName == userActionModel.UserName);
+
+                if (testResult == null)
+                    courseDbModel = _trainCalFactory.ConstructCourseForUpdate(courseDbModel, courseActionList);
+                else
+                    return 1;
+                //var testResult = courseDbModel.UserActionModel.FirstOrDefault(search => search.UserName == userActionModel.UserName);
             }
 
+            
 
             if (!forUpdate)
             {

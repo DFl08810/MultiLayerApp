@@ -40,9 +40,18 @@
                     <div class="col-md-4">Course capacity: @Html.DisplayFor(modelItem => item.CourseCurrentCapacity)/@Html.DisplayFor(modelItem => item.CourseMaxCapacity)</div>
                     <div class="col-md-4">Status: @Html.DisplayFor(modelItem => item.IsOpened)</div>
                     <div class="col-md-4" id="controls">
-                        <span class="btn-control-group">
-                            <button id="@item.Id" type="button" class="btn btn-card-default" onclick="PerformSignonAction(this.id)">Sign on</button>
-                        </span>
+                        @if (item.SignedUsers == null)
+                        {
+                            <span class="btn-control-group">
+                                <button id="@item.Id" type="button" class="btn btn-card-default" onclick="PerformSignonAction(this.id)">Sign on</button>
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="btn-control-group">
+                                <button id="@item.Id" type="button" class="btn btn-card-negative" onclick="PerformSignoffAction(this.id)">Sign off</button>
+                            </span>
+                        }
                     </div>
                 </div>
             </div>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using App.Core.Data;
 using App.Core.Data.Interfaces;
+using App.Core.Factories;
 using App.Core.Models;
 using AppLibrary.Core.Data.Interfaces;
 using AppLibrary.Core.Factories;
@@ -56,6 +57,7 @@ namespace App.Core
             services.AddTransient<IModelMapper<UserActionModel, UserActionDbModel>, AppLibrary.Core.Data.UserActionDataMap>();
             services.AddTransient<IViewModelMapper<UserViewModel, UserActionModel>, UserViewModelMap>();
             services.AddTransient<ITrainCalendarFactory, TrainCalendarFactory>();
+            services.AddTransient<ICourseViewFactory, CourseViewFactory>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

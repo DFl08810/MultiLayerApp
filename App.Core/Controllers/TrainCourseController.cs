@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using App.Core.Data;
 using App.Core.Data.Interfaces;
+using App.Core.Factories;
 using App.Core.Models;
 using AppLibrary.Core.Models;
 using AppLibrary.Core.Services.Interfaces;
@@ -23,18 +24,21 @@ namespace App.Core.Controllers
         private readonly IUserActionService _userActionService;
         private readonly IViewModelMapper<CourseViewModel, CourseModel> _modelMapper;
         private readonly IViewModelMapper<UserViewModel, UserActionModel> _userMapper;
+        private readonly ICourseViewFactory _courseFactory;
         private readonly UserManager<User> _userManager;
 
         public TrainCourseController(ITrainCourseService trainCourseService,
                                     IUserActionService userActionService,
                                     IViewModelMapper<CourseViewModel, CourseModel> modelMapper,
                                     IViewModelMapper<UserViewModel, UserActionModel> userMapper,
+                                    ICourseViewFactory courseFactory,
                                     UserManager<IdentityAuthLib.Models.User> userManager)
         {
             this._trainCourseService = trainCourseService;
             this._userActionService = userActionService;
             this._modelMapper = modelMapper;
             this._userMapper = userMapper;
+            this._courseFactory = courseFactory;
             this._userManager = userManager;
         }
 
@@ -198,10 +202,14 @@ namespace App.Core.Controllers
         }
         #endregion
 
-        public IActionResult CourseUserControl()
+        public async Task<IActionResult> CourseUserControl()
         {
+            var AuthorizedUser = await _userManager.GetUserAsync(User);
+            var UserAction = new UserActionModel() { UserName = AuthorizedUser.UserName, AuthSystemIdentity = AuthorizedUser.Id };
+
             var trainCourseList = _trainCourseService.GetRange();
-            var trainCourseMapped = _modelMapper.MapRangeUpwards(trainCourseList);
+            var trainCourseMapped = _courseFactory.CreateCourseForUserAction(trainCourseList, UserAction);
+            //var trainCourseMapped = _modelMapper.MapRangeUpwards(trainCourseList);
             return View(trainCourseMapped);
         }
 
@@ -215,9 +223,15 @@ namespace App.Core.Controllers
 
             var UserAction = new UserActionModel() { UserName = AuthorizedUser.UserName, AuthSystemIdentity = AuthorizedUser.Id, Course = courseModel };
 
-            _trainCourseService.Save(courseModel, UserAction, true, true);
-            return StatusCode(200);
+            var actionStatus = _trainCourseService.Save(courseModel, UserAction, true, true);
+
+            if(actionStatus == 0)
+                return StatusCode(200);
+            else
+                return StatusCode(500);
         }
+
+        
 
     }
 }

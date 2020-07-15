@@ -15,6 +15,6 @@ namespace AppLibrary.Core.Services.Interfaces
 
         int Delete(int saveObjId);
         int Delete(IEnumerable<int> saveObjIdList);
-
+        int DeleteRelatedUser(int courseId, UserActionModel userActionObject);
     }
 }

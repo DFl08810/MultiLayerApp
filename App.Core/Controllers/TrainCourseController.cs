@@ -231,7 +231,30 @@ namespace App.Core.Controllers
                 return StatusCode(500);
         }
 
-        
+        [HttpGet]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> SignUserOffTerm(int objId)
+        {
+            var AuthorizedUser = await _userManager.GetUserAsync(User);
+
+            var courseModel = _trainCourseService.GetById(objId);
+            //var courseModelList = new List<CourseModel>();
+            //courseModelList.Add(courseModel);
+
+            var UserAction = new UserActionModel() { UserName = AuthorizedUser.UserName, AuthSystemIdentity = AuthorizedUser.Id, Course = courseModel };
+
+            //var trainCourseMapped = _courseFactory.CreateCourseForUserAction(courseModelList, UserAction);
+
+            //var actionStatus = _trainCourseService.Save(courseModel, UserAction, true, true);
+
+            var actionStatus = _trainCourseService.DeleteRelatedUser(objId, UserAction);
+
+            if (actionStatus == 0)
+                return StatusCode(200);
+            else
+                return StatusCode(500);
+        }
+
 
     }
 }

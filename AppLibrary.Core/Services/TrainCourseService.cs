@@ -110,5 +110,26 @@ namespace AppLibrary.Core.Services
 
             return 0;
         }
+
+        public int DeleteRelatedUser(int courseId, UserActionModel userActionObject)
+        {
+            var dbCoursesList = _courseDataAccess.GetCombinedList(courseId);
+            var mappedCourse = _trainCalFactory.CreateFullCourseList(dbCoursesList).FirstOrDefault();
+
+
+            mappedCourse.UserActionModel = mappedCourse.UserActionModel.Where(x => x.UserName != userActionObject.UserName).ToList();
+
+            mappedCourse.UserActionModel = mappedCourse.UserActionModel;
+
+            var courseForDb = _modelMapper.MapSingleDownwards(mappedCourse);
+
+            courseForDb.UserActionModel = _userMapper.MapRangeDownwards(mappedCourse.UserActionModel);
+
+            _courseDataAccess.Update(courseForDb);
+            _courseDataAccess.Commint();
+            //mappedCourse.UserActionModel == newUserList
+
+            return 0;
+        }
     }
 }

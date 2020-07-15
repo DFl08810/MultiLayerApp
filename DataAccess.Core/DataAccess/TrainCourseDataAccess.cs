@@ -40,7 +40,7 @@ namespace DataAccess.Core.DataAccess
 
         public CourseDbModel DeleteRelated(CourseDbModel updateObj)
         {
-            throw new NotImplementedException();
+            
         }
 
         public CourseDbModel GetById(int id)

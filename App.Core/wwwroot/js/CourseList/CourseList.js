@@ -254,9 +254,7 @@ function PerformSignonAction(itemId) {
         data: data,
         success: function (result) {
             console.log('Data received: ');
-            console.log(result);
-            console.log(result.CourseLocation);
-            FillForm(result);
+            location.reload();
         }
     });
 }
@@ -272,9 +270,7 @@ function PerformSignoffAction(itemId) {
         data: data,
         success: function (result) {
             console.log('Data received: ');
-            console.log(result);
-            console.log(result.CourseLocation);
-            FillForm(result);
+            location.reload();
         }
     });
 }

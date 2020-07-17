@@ -7,6 +7,15 @@ namespace DataAccess.Core
     public class DataContext : DbContext
     {
         public DbSet<CourseDbModel> CoursesEntries { get; set; }
+        public DbSet<UserActionDbModel> UserActionEntries { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CourseDbModel>()
+                .HasMany(u => u.UserActionModel)
+                .WithOne(c => c.Course);
+
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

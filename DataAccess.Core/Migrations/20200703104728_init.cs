@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccess.Core.Migrations
 {
-    public partial class initial : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,10 +27,39 @@ namespace DataAccess.Core.Migrations
                 {
                     table.PrimaryKey("PK_CoursesEntries", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "UserActionEntries",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AuthSystemIdentity = table.Column<string>(nullable: true),
+                    UserName = table.Column<string>(nullable: true),
+                    CourseId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserActionEntries", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserActionEntries_CoursesEntries_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "CoursesEntries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserActionEntries_CourseId",
+                table: "UserActionEntries",
+                column: "CourseId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "UserActionEntries");
+
             migrationBuilder.DropTable(
                 name: "CoursesEntries");
         }

@@ -31,6 +31,7 @@ namespace App.Core.Controllers
             this._userManager = userManager;
         }
 
+        #region IndexActions
         public IActionResult Index()
         {
             var trainCourseList = _trainCourseService.GetRange();
@@ -170,5 +171,15 @@ namespace App.Core.Controllers
             var returnMessage = "OK";
             return Json(returnMessage);
         }
+        #endregion
+
+        public IActionResult CourseUserControl()
+        {
+            var trainCourseList = _trainCourseService.GetRange();
+            var trainCourseMapped = _modelMapper.MapRangeUpwards(trainCourseList);
+            return View(trainCourseMapped);
+        }
+
+
     }
 }

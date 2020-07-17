@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using App.Core.Data;
 using App.Core.Data.Interfaces;
+using App.Core.Factories;
 using App.Core.Models;
 using AppLibrary.Core.Models;
 using AppLibrary.Core.Services.Interfaces;
@@ -12,6 +13,7 @@ using IdentityAuthLib.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Razor.Language;
 
 namespace App.Core.Controllers
 {
@@ -19,15 +21,24 @@ namespace App.Core.Controllers
     public class TrainCourseController : Controller
     {
         private readonly ITrainCourseService _trainCourseService;
+        private readonly IUserActionService _userActionService;
         private readonly IViewModelMapper<CourseViewModel, CourseModel> _modelMapper;
+        private readonly IViewModelMapper<UserViewModel, UserActionModel> _userMapper;
+        private readonly ICourseViewFactory _courseFactory;
         private readonly UserManager<User> _userManager;
 
         public TrainCourseController(ITrainCourseService trainCourseService,
+                                    IUserActionService userActionService,
                                     IViewModelMapper<CourseViewModel, CourseModel> modelMapper,
+                                    IViewModelMapper<UserViewModel, UserActionModel> userMapper,
+                                    ICourseViewFactory courseFactory,
                                     UserManager<IdentityAuthLib.Models.User> userManager)
         {
             this._trainCourseService = trainCourseService;
+            this._userActionService = userActionService;
             this._modelMapper = modelMapper;
+            this._userMapper = userMapper;
+            this._courseFactory = courseFactory;
             this._userManager = userManager;
         }
 
@@ -35,9 +46,21 @@ namespace App.Core.Controllers
         public IActionResult Index()
         {
             var trainCourseList = _trainCourseService.GetRange();
+            var trainCoursesMapped = new List<CourseViewModel>();
             //var trainBindedList = _dataMap.MapRangeUpwards(trainCourseList);
-            var trainCourseMapped = _modelMapper.MapRangeUpwards(trainCourseList);
-            return View(trainCourseMapped);
+            //var trainCourseMapped = _modelMapper.MapRangeUpwards(trainCourseList);
+            foreach (var item in trainCourseList)
+            {
+                var viewModel = new CourseViewModel();
+                viewModel = _modelMapper.MapSingleUpwards(item);
+                if (item.UserActionModel != null)
+                {
+                    viewModel.SignedUsers = _userMapper.MapRangeUpwards(item.UserActionModel).ToList();
+                }
+                trainCoursesMapped.Add(viewModel);
+            }
+
+            return View(trainCoursesMapped);
         }
 
 
@@ -72,7 +95,10 @@ namespace App.Core.Controllers
                 var AuthorizedUser = await _userManager.GetUserAsync(User);
                 data.CreatedBy = AuthorizedUser.UserName;
                 var courseData = _modelMapper.MapSingleDownwards(data);
-                _trainCourseService.Save(courseData);
+
+                var UserAction = new UserActionModel() { UserName = data.CreatedBy, AuthSystemIdentity = AuthorizedUser.Id };
+
+                _trainCourseService.Save(courseData, UserAction);
                 //var courseData = _coursesService.BindCoursesModelToData(data);
                 //courseData = _coursesData.Add(courseData);
                 //_coursesData.Commint();
@@ -155,8 +181,11 @@ namespace App.Core.Controllers
             #region DatabaseAccess
             try
             {
+
+                var UserAction = new UserActionModel() { UserName = "test", AuthSystemIdentity = "full" };
+
                 var bindedCourseData = _modelMapper.MapSingleDownwards(data);
-                _trainCourseService.Save(bindedCourseData, true);
+                _trainCourseService.Save(bindedCourseData, UserAction,true);
                 //var courseData = _coursesService.BindCoursesModelToData(data);
                 //courseData = _coursesData.Update(courseData);
                 //_coursesData.Commint();
@@ -173,11 +202,57 @@ namespace App.Core.Controllers
         }
         #endregion
 
-        public IActionResult CourseUserControl()
+        public async Task<IActionResult> CourseUserControl()
         {
+            var AuthorizedUser = await _userManager.GetUserAsync(User);
+            var UserAction = new UserActionModel() { UserName = AuthorizedUser.UserName, AuthSystemIdentity = AuthorizedUser.Id };
+
             var trainCourseList = _trainCourseService.GetRange();
-            var trainCourseMapped = _modelMapper.MapRangeUpwards(trainCourseList);
+            var trainCourseMapped = _courseFactory.CreateCourseForUserAction(trainCourseList, UserAction);
+            //var trainCourseMapped = _modelMapper.MapRangeUpwards(trainCourseList);
             return View(trainCourseMapped);
+        }
+
+        [HttpGet]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> SignUserToTerm(int objId)
+        {
+            var AuthorizedUser = await _userManager.GetUserAsync(User);
+
+            var courseModel = _trainCourseService.GetById(objId);
+
+            var UserAction = new UserActionModel() { UserName = AuthorizedUser.UserName, AuthSystemIdentity = AuthorizedUser.Id, Course = courseModel };
+
+            var actionStatus = _trainCourseService.Save(courseModel, UserAction, true, true);
+
+            if(actionStatus == 0)
+                return StatusCode(200);
+            else
+                return StatusCode(500);
+        }
+
+        [HttpGet]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> SignUserOffTerm(int objId)
+        {
+            var AuthorizedUser = await _userManager.GetUserAsync(User);
+
+            var courseModel = _trainCourseService.GetById(objId);
+            //var courseModelList = new List<CourseModel>();
+            //courseModelList.Add(courseModel);
+
+            var UserAction = new UserActionModel() { UserName = AuthorizedUser.UserName, AuthSystemIdentity = AuthorizedUser.Id, Course = courseModel };
+
+            //var trainCourseMapped = _courseFactory.CreateCourseForUserAction(courseModelList, UserAction);
+
+            //var actionStatus = _trainCourseService.Save(courseModel, UserAction, true, true);
+
+            var actionStatus = _trainCourseService.DeleteRelatedUser(objId, UserAction);
+
+            if (actionStatus == 0)
+                return StatusCode(200);
+            else
+                return StatusCode(500);
         }
 
 

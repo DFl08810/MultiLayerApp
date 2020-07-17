@@ -16,6 +16,7 @@ namespace App.Core.Models
         public string CourseShortDescription { get; set; }
         public int CourseCurrentCapacity { get; set; }
         public int CourseMaxCapacity { get; set; }
+        public List<UserViewModel> SignedUsers { get; set; }
         public bool IsOpened { get; set; }
     }
 }

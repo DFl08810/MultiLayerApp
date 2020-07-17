@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Core.DataAccess
 {
@@ -39,7 +40,13 @@ namespace DataAccess.Core.DataAccess
 
         public CourseDbModel DeleteRelated(CourseDbModel updateObj)
         {
-            throw new NotImplementedException();
+            Auxiliary.DetachAllEntities(db);
+            var deleteList = updateObj.UserActionModel;
+            //deleteList.FirstOrDefault().Course = updateObj;
+            //db.RemoveRange(deleteList);
+            db.UserActionEntries.RemoveRange(deleteList);
+            //db.SaveChanges();
+            return updateObj;
         }
 
         public CourseDbModel GetById(int id)
@@ -55,7 +62,8 @@ namespace DataAccess.Core.DataAccess
 
         public IEnumerable<CourseDbModel> GetCombinedList(int id)
         {
-            throw new NotImplementedException();
+            List<CourseDbModel> coursesList = db.CoursesEntries.Where(ts => ts.Id == id).Include(x => x.UserActionModel).ToList();
+            return coursesList;
         }
 
         public int GetCountOf()
@@ -65,11 +73,13 @@ namespace DataAccess.Core.DataAccess
 
         public IEnumerable<CourseDbModel> GetRange()
         {
-            return db.CoursesEntries;
+            return db.CoursesEntries.Include(x => x.UserActionModel).ToList();
         }
 
         public CourseDbModel Update(CourseDbModel updateObj)
         {
+            Auxiliary.DetachAllEntities(db);
+
             db.CoursesEntries.Update(updateObj);
             return updateObj;
         }

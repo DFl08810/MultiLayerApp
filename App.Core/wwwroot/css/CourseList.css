@@ -24,10 +24,22 @@
                 border-radius: 0px;
                 background-color: #33658A;
                 color: white;
+                padding: 0.5rem;
+            }
+
+            .card .card-footer #controls .btn-control-group .btn-card-negative {
+                width: 5rem;
+                border-radius: 0px;
+                background-color: #B12F31;
+                color: white;
+                padding: 0.5rem;
             }
 
                 .card .card-footer #controls .btn-control-group .btn-card-default:hover {
                     background-color: #40798C;
+                }
+                .card .card-footer #controls .btn-control-group .btn-card-negative:hover {
+                    background-color: #D04E50;
                 }
 
 .modal-dialog {

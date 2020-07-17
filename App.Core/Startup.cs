@@ -2,9 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Core.Data;
 using App.Core.Data.Interfaces;
+using App.Core.Factories;
 using App.Core.Models;
 using AppLibrary.Core.Data.Interfaces;
+using AppLibrary.Core.Factories;
+using AppLibrary.Core.Factories.Interfaces;
 using AppLibrary.Core.Models;
 using AppLibrary.Core.Services;
 using AppLibrary.Core.Services.Interfaces;
@@ -46,8 +50,14 @@ namespace App.Core
             services.AddDbContext<DataContext>();
             services.AddTransient<IModelMapper<CourseModel, CourseDbModel>, AppLibrary.Core.Data.TrainCourseDataMap>();
             services.AddTransient<DataAccess.Core.Interface.IDataAccess<CourseDbModel>, DataAccess.Core.DataAccess.TrainCourseDataAccess>();
+            services.AddTransient<DataAccess.Core.Interface.IDataAccess<UserActionDbModel>, DataAccess.Core.DataAccess.UserActionDataAccess>();
             services.AddTransient<AppLibrary.Core.Services.Interfaces.ITrainCourseService, AppLibrary.Core.Services.TrainCourseService>();
+            services.AddTransient<AppLibrary.Core.Services.Interfaces.IUserActionService, AppLibrary.Core.Services.UserActionService>();
             services.AddTransient<IViewModelMapper<CourseViewModel, CourseModel>, App.Core.Data.CourseDataMap>();
+            services.AddTransient<IModelMapper<UserActionModel, UserActionDbModel>, AppLibrary.Core.Data.UserActionDataMap>();
+            services.AddTransient<IViewModelMapper<UserViewModel, UserActionModel>, UserViewModelMap>();
+            services.AddTransient<ITrainCalendarFactory, TrainCalendarFactory>();
+            services.AddTransient<ICourseViewFactory, CourseViewFactory>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

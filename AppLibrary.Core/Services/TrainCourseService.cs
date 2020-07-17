@@ -16,16 +16,19 @@ namespace AppLibrary.Core.Services
     {
         private readonly IDataAccess<CourseDbModel> _courseDataAccess;
         private readonly IModelMapper<CourseModel, CourseDbModel> _modelMapper;
+        private readonly IDataAccess<UserActionDbModel> _userDataAccess;
         private readonly IModelMapper<UserActionModel, UserActionDbModel> _userMapper;
         private readonly ITrainCalendarFactory _trainCalFactory;
 
         public TrainCourseService(IDataAccess<CourseDbModel> courseDataAccess,
+                                  IDataAccess<UserActionDbModel> userDataAccess,
                                   IModelMapper<CourseModel, CourseDbModel> modelMapper,
                                   IModelMapper<UserActionModel, UserActionDbModel> userMapper,
                                   ITrainCalendarFactory trainCalendarFactory)
         {
             this._courseDataAccess = courseDataAccess;
             this._modelMapper = modelMapper;
+            this._userDataAccess = userDataAccess;
             this._userMapper = userMapper;
             this._trainCalFactory = trainCalendarFactory;
         }
@@ -116,8 +119,10 @@ namespace AppLibrary.Core.Services
             var dbCoursesList = _courseDataAccess.GetCombinedList(courseId);
             var mappedCourse = _trainCalFactory.CreateFullCourseList(dbCoursesList).FirstOrDefault();
 
+            mappedCourse.CourseCurrentCapacity = mappedCourse.UserActionModel.Where(x => x.UserName != userActionObject.UserName).ToList().Count();
 
-            mappedCourse.UserActionModel = mappedCourse.UserActionModel.Where(x => x.UserName != userActionObject.UserName).ToList();
+            mappedCourse.UserActionModel = mappedCourse.UserActionModel.Where(x => x.UserName == userActionObject.UserName).ToList();
+            //mappedCourse.CourseCurrentCapacity -= 1;
 
             mappedCourse.UserActionModel = mappedCourse.UserActionModel;
 
@@ -125,8 +130,21 @@ namespace AppLibrary.Core.Services
 
             courseForDb.UserActionModel = _userMapper.MapRangeDownwards(mappedCourse.UserActionModel);
 
-            _courseDataAccess.Update(courseForDb);
+            //_courseDataAccess.DeleteRelated(courseForDb);
+            var actionId = mappedCourse.UserActionModel.FirstOrDefault().Id;
+            try
+            {
+                //_userDataAccess.Delete(actionId);
+                _courseDataAccess.Update(courseForDb);
+                _courseDataAccess.Commint();
+                _courseDataAccess.DeleteRelated(courseForDb);
+            }
+            catch (Exception exc)
+            {
+                return 1;
+            }
             _courseDataAccess.Commint();
+            //_userDataAccess.Commint();
             //mappedCourse.UserActionModel == newUserList
 
             return 0;

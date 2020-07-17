@@ -40,7 +40,13 @@ namespace DataAccess.Core.DataAccess
 
         public CourseDbModel DeleteRelated(CourseDbModel updateObj)
         {
-            
+            Auxiliary.DetachAllEntities(db);
+            var deleteList = updateObj.UserActionModel;
+            //deleteList.FirstOrDefault().Course = updateObj;
+            //db.RemoveRange(deleteList);
+            db.UserActionEntries.RemoveRange(deleteList);
+            //db.SaveChanges();
+            return updateObj;
         }
 
         public CourseDbModel GetById(int id)
@@ -72,6 +78,8 @@ namespace DataAccess.Core.DataAccess
 
         public CourseDbModel Update(CourseDbModel updateObj)
         {
+            Auxiliary.DetachAllEntities(db);
+
             db.CoursesEntries.Update(updateObj);
             return updateObj;
         }

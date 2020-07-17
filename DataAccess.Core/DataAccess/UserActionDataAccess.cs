@@ -31,7 +31,12 @@ namespace DataAccess.Core.DataAccess
 
         public UserActionDbModel Delete(int id)
         {
-            throw new NotImplementedException();
+            var userAction = GetById(id);
+            if(userAction != null)
+            {
+                db.UserActionEntries.Remove(userAction);
+            }
+            return userAction;
         }
 
         public UserActionDbModel DeleteRelated(UserActionDbModel updateObj)

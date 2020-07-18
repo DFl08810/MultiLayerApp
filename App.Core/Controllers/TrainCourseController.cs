@@ -43,6 +43,7 @@ namespace App.Core.Controllers
         }
 
         #region IndexActions
+        [Authorize(Roles = App.Core.AuthInfrastructure.Role.Admin)]
         public IActionResult Index()
         {
             var trainCourseList = _trainCourseService.GetRange();

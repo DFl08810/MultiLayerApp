@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityAuthLib.Models.User> SignInManager
+@inject UserManager<IdentityAuthLib.Models.User> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -24,12 +30,18 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="TrainCourse" asp-action="Index">Calendar</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="TrainCourse" asp-action="CourseUserControl">Cal User Control</a>
-                        </li>
+                        @if (User.IsInRole(App.Core.AuthInfrastructure.Role.Admin))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="TrainCourse" asp-action="Index">Calendar</a>
+                            </li>
+                        }
+                        @if (User.IsInRole(App.Core.AuthInfrastructure.Role.User))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="TrainCourse" asp-action="CourseUserControl">Calendar</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
@@ -40,7 +52,7 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            @RenderBody()
+            @RenderBody()         
         </main>
     </div>
 

@@ -1,0 +1,43 @@
+﻿
+
+$primary-dark: #1A181B;
+$primary-light: #EBF8FF;
+$primary-red: #A22C29;
+$primary-yellow: #F1D302;
+
+$secondary-dark: #5E5661;
+$secondary-light: #C2EAFF;
+$secondary-red: #D24E4B;
+$secondary-yellow: #A28C02;
+
+$background-col: #FFFCEB;
+body {
+    background-color: $background-col;
+}
+
+.navbar-crafty {
+    background-color: $primary-dark !important;
+    background: linear-gradient(0deg, rgba(245,181,0,0.2609243526512167) 0%, rgba(255,188,5,0.40938373640471815) 3%, rgba(31,25,0,1) 6%);
+
+    .navbar-brand {
+        color: $primary-light;
+    }
+
+    .navbar-brand:hover {
+        color: $primary-yellow;
+    }
+
+    .navbar-nav {
+        .nav-item {
+            .text-menu-light {
+                color: $primary-light !important;
+            }
+        }
+
+        .nav-item {
+            .text-menu-light:hover {
+                color: $primary-yellow !important;
+            }
+        }
+    }
+}

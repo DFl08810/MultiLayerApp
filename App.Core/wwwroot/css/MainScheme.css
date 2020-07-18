@@ -1,0 +1,14 @@
+﻿body {
+  background-color: #FFFCEB; }
+
+.navbar-crafty {
+  background-color: #1A181B !important;
+  background: linear-gradient(0deg, rgba(245, 181, 0, 0.260924) 0%, rgba(255, 188, 5, 0.409384) 3%, #1f1900 6%); }
+  .navbar-crafty .navbar-brand {
+    color: #EBF8FF; }
+  .navbar-crafty .navbar-brand:hover {
+    color: #F1D302; }
+  .navbar-crafty .navbar-nav .nav-item .text-menu-light {
+    color: #EBF8FF !important; }
+  .navbar-crafty .navbar-nav .nav-item .text-menu-light:hover {
+    color: #F1D302 !important; }

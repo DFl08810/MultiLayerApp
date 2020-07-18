@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AppLibrary.Core\AppLibrary.Core.csproj" />
     <ProjectReference Include="..\IdentityAuthLib\IdentityAuthLib.csproj" />
   </ItemGroup>
@@ -21,6 +29,10 @@
 
   <ItemGroup>
     <Folder Include="Exchange\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="compilerconfig.json" />
   </ItemGroup>
 
 </Project>

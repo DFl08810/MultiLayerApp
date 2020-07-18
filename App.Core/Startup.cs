@@ -45,6 +45,7 @@ namespace App.Core
             //services.AddDbContext<IdentityDataContext>(options =>
             //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<User, IdentityRole>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<IdentityDataContext>();
             #endregion
             services.AddDbContext<DataContext>();

@@ -8,8 +8,4 @@
     <ProjectReference Include="..\DataAccess.Core\DataAccess.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Libraries\" />
-  </ItemGroup>
-
 </Project>

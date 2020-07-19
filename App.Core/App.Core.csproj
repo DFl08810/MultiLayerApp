@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <Folder Include="Exchange\" />
+    <Folder Include="wwwroot\lib\particlesJs\" />
   </ItemGroup>
 
   <ItemGroup>

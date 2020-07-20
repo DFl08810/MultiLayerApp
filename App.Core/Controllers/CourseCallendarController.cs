@@ -46,29 +46,33 @@ namespace App.Core.Controllers
         [Authorize(Roles = App.Core.AuthInfrastructure.Role.Admin)]
         public IActionResult Index()
         {
+            //retrieve list of all courses available
             var trainCourseList = _trainCourseService.GetRange();
+            //initialize list for update
             var trainCoursesMapped = new List<CourseViewModel>();
-            //var trainBindedList = _dataMap.MapRangeUpwards(trainCourseList);
-            //var trainCourseMapped = _modelMapper.MapRangeUpwards(trainCourseList);
+            //iterates over retrieved courses list
             foreach (var item in trainCourseList)
             {
-                var viewModel = new CourseViewModel();
-                viewModel = _modelMapper.MapSingleUpwards(item);
+                //maps item from list to view model
+                var viewModel = _modelMapper.MapSingleUpwards(item);
+                //if user action is present in item, map it to view model
                 if (item.UserActionModel != null)
                 {
                     viewModel.SignedUsers = _userMapper.MapRangeUpwards(item.UserActionModel).ToList();
                 }
+                //add view model to list
                 trainCoursesMapped.Add(viewModel);
             }
 
             return View(trainCoursesMapped);
         }
 
-
+        //Save is activated by ajax call on client side
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Save([FromBody] CourseViewModel data)
         {
+            //empty data returns error to client
             if (data == null)
             {
                 return StatusCode(400);
@@ -77,6 +81,7 @@ namespace App.Core.Controllers
             #region DateValidation
             DateTime parsedDate;
             string pattern = "d.M.yyyy H:m:s";
+            //checks if datetime stamp is parsable, if not return error to client
             var isValidDateTime = DateTime.TryParseExact(data.FriendlyCourseDate, pattern, null, DateTimeStyles.None, out parsedDate);
             if (!isValidDateTime)
             {
@@ -93,19 +98,20 @@ namespace App.Core.Controllers
             #region DatabaseAccess
             try
             {
+                //retrieves current active user
                 var AuthorizedUser = await _userManager.GetUserAsync(User);
+                //assignes creator of data request
                 data.CreatedBy = AuthorizedUser.UserName;
+                //map view data model to logic layer data model
                 var courseData = _modelMapper.MapSingleDownwards(data);
-
+                //initialize User Action data model
                 var UserAction = new UserActionModel() { UserName = data.CreatedBy, AuthSystemIdentity = AuthorizedUser.Id };
-
+                //send data to database
                 _trainCourseService.Save(courseData, UserAction);
-                //var courseData = _coursesService.BindCoursesModelToData(data);
-                //courseData = _coursesData.Add(courseData);
-                //_coursesData.Commint();
             }
             catch (Exception exc)
             {
+                //if saving fails, return error
                 return StatusCode(500);
             }
             #endregion
@@ -115,15 +121,18 @@ namespace App.Core.Controllers
             return Json(returnMessage);
         }
 
+        //Get single course by id
         [HttpGet]
         public IActionResult GetById(int objId)
         {
             var courseModel = _trainCourseService.GetById(objId);
+            //maps data to view model
             var courseViewModel = _modelMapper.MapSingleUpwards(courseModel);
-            //var obj = _coursesData.GetById(objId);
+            //pass to client as json
             return Json(courseViewModel);
         }
 
+        //Client
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int objId)
@@ -187,9 +196,6 @@ namespace App.Core.Controllers
 
                 var bindedCourseData = _modelMapper.MapSingleDownwards(data);
                 _trainCourseService.Save(bindedCourseData, UserAction,true);
-                //var courseData = _coursesService.BindCoursesModelToData(data);
-                //courseData = _coursesData.Update(courseData);
-                //_coursesData.Commint();
             }
             catch (Exception exc)
             {
@@ -210,7 +216,6 @@ namespace App.Core.Controllers
 
             var trainCourseList = _trainCourseService.GetRange(true);
             var trainCourseMapped = _courseFactory.CreateCourseForUserAction(trainCourseList, UserAction);
-            //var trainCourseMapped = _modelMapper.MapRangeUpwards(trainCourseList);
             return View(trainCourseMapped);
         }
 
@@ -239,14 +244,8 @@ namespace App.Core.Controllers
             var AuthorizedUser = await _userManager.GetUserAsync(User);
 
             var courseModel = _trainCourseService.GetById(objId);
-            //var courseModelList = new List<CourseModel>();
-            //courseModelList.Add(courseModel);
 
             var UserAction = new UserActionModel() { UserName = AuthorizedUser.UserName, AuthSystemIdentity = AuthorizedUser.Id, Course = courseModel };
-
-            //var trainCourseMapped = _courseFactory.CreateCourseForUserAction(courseModelList, UserAction);
-
-            //var actionStatus = _trainCourseService.Save(courseModel, UserAction, true, true);
 
             var actionStatus = _trainCourseService.DeleteRelatedUser(objId, UserAction);
 

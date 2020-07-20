@@ -1,19 +1,45 @@
-﻿using App.Core.Data.Interfaces;
-using App.Core.Models;
+﻿using AppLibrary.Core.Data.Interfaces;
 using AppLibrary.Core.Models;
-using AppLibrary.Core.Services.Interfaces;
+using DataAccess.Core.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace App.Core.Data
+namespace AppLibrary.Core.Data
 {
-    public class CourseDataMap : IViewModelMapper<CourseViewModel, CourseModel>
+    public class CourseDataMap : IModelMapper<CourseModel, CourseDbModel>
     {
-        public CourseModel MapSingleDownwards(CourseViewModel singleModel)
+        public IEnumerable<CourseDbModel> MapRangeDownwards(IEnumerable<CourseModel> modelRange)
         {
-            var courseDbModel = new CourseModel
+            var courseDbModelList = new List<CourseDbModel>();
+
+            foreach (var courseModel in modelRange)
+            {
+                var courseDbModel = MapSingleDownwards(courseModel);
+
+                courseDbModelList.Add(courseDbModel);
+            }
+
+            return courseDbModelList;
+        }
+
+        public IEnumerable<CourseModel> MapRangeUpwards(IEnumerable<CourseDbModel> modelRange)
+        {
+            var courseDbModelList = new List<CourseModel>();
+
+            foreach (var courseDbModel in modelRange)
+            {
+
+                var courseModel = MapSingleUpwards(courseDbModel);
+                courseDbModelList.Add(courseModel);
+            }
+
+            return courseDbModelList;
+        }
+
+        public CourseDbModel MapSingleDownwards(CourseModel singleModel)
+        {
+            var courseDbModel = new CourseDbModel
             {
                 Id = singleModel.Id,
                 CreatedBy = singleModel.CreatedBy,
@@ -30,9 +56,9 @@ namespace App.Core.Data
             return courseDbModel;
         }
 
-        public CourseViewModel MapSingleUpwards(CourseModel singleModel)
+        public CourseModel MapSingleUpwards(CourseDbModel singleModel)
         {
-            var courseModel = new CourseViewModel
+            var courseModel = new CourseModel
             {
                 Id = singleModel.Id,
                 CreatedBy = singleModel.CreatedBy,
@@ -48,32 +74,5 @@ namespace App.Core.Data
 
             return courseModel;
         }
-
-        public IEnumerable<CourseModel> MapRangeDownwards(IEnumerable<CourseViewModel> modelRange)
-        {
-            var courseDbModelList = new List<CourseModel>();
-
-            foreach (var courseModel in modelRange)
-            {
-                var courseDbModel = MapSingleDownwards(courseModel);
-                courseDbModelList.Add(courseDbModel);
-            }
-
-            return courseDbModelList;
-        }
-
-        public IEnumerable<CourseViewModel> MapRangeUpwards(IEnumerable<CourseModel> modelRange)
-        {
-            var courseDbModelList = new List<CourseViewModel>();
-
-            foreach (var courseDbModel in modelRange)
-            {
-                var courseModel = MapSingleUpwards(courseDbModel);
-                courseDbModelList.Add(courseModel);
-            }
-
-            return courseDbModelList;
-        }
-
     }
 }

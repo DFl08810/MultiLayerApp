@@ -52,17 +52,22 @@ namespace AppLibrary.Core.Services
             return bindedCourseObj;
         }
 
-        public IEnumerable<CourseModel> GetRange()
+        public IEnumerable<CourseModel> GetRange(bool removeDisabled = false)
         {
             var courseDownrangeList = _courseDataAccess.GetRange();
+            //for removeDisabled option selected true, removes inactive courses from list 
+            if (removeDisabled)
+            {
+                courseDownrangeList = courseDownrangeList.Where(isActive => isActive.IsOpened == true).ToList();
+            }
             //var courseModelList = _modelMapper.MapRangeUpwards(courseDownrangeList);
+            
             var courseModelList = _trainCalFactory.CreateFullCourseList(courseDownrangeList);
             return courseModelList;
         }
 
         public int Save(CourseModel saveCourseModel, UserActionModel userActionModel, bool forUpdate = false, bool updateRelated = false)
         {
-
             var courseDbModel = _modelMapper.MapSingleDownwards(saveCourseModel);
 
             var courseActionList = new List<UserActionModel>();

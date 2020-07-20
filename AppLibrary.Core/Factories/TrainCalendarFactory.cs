@@ -52,7 +52,6 @@ namespace AppLibrary.Core.Factories
                     courseMapped.UserActionModel = _userMapper.MapRangeUpwards(item.UserActionModel);
                 }
 
-
                 outputList.Add(courseMapped);
             }
 

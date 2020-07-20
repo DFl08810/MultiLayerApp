@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Razor.Language;
 namespace App.Core.Controllers
 {
     [Authorize]
-    public class TrainCourseController : Controller
+    public class CourseCallendarController : Controller
     {
         private readonly ITrainCourseService _trainCourseService;
         private readonly IUserActionService _userActionService;
@@ -27,7 +27,7 @@ namespace App.Core.Controllers
         private readonly ICourseViewFactory _courseFactory;
         private readonly UserManager<User> _userManager;
 
-        public TrainCourseController(ITrainCourseService trainCourseService,
+        public CourseCallendarController(ITrainCourseService trainCourseService,
                                     IUserActionService userActionService,
                                     IViewModelMapper<CourseViewModel, CourseModel> modelMapper,
                                     IViewModelMapper<UserViewModel, UserActionModel> userMapper,
@@ -208,7 +208,7 @@ namespace App.Core.Controllers
             var AuthorizedUser = await _userManager.GetUserAsync(User);
             var UserAction = new UserActionModel() { UserName = AuthorizedUser.UserName, AuthSystemIdentity = AuthorizedUser.Id };
 
-            var trainCourseList = _trainCourseService.GetRange();
+            var trainCourseList = _trainCourseService.GetRange(true);
             var trainCourseMapped = _courseFactory.CreateCourseForUserAction(trainCourseList, UserAction);
             //var trainCourseMapped = _modelMapper.MapRangeUpwards(trainCourseList);
             return View(trainCourseMapped);

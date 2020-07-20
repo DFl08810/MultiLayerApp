@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace App.Core.Data
 {
-    public class UserViewModelMap : IViewModelMapper<UserViewModel, UserActionModel>
+    public class UserActionViewModelMap : IViewModelMapper<UserViewModel, UserActionModel>
     {
         public IEnumerable<UserActionModel> MapRangeDownwards(IEnumerable<UserViewModel> modelRange)
         {

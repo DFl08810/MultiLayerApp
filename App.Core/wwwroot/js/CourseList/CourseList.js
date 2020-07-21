@@ -135,7 +135,7 @@ function SendDataToController() {
     console.log('Submitting form...');
     $.ajax({
         type: 'POST',
-        url: '/TrainCourse/Save',
+        url: '/CourseCalendar/Save',
         dataType: 'json',
         contentType: dataType,
         headers: { 'RequestVerificationToken': verificationToken },
@@ -212,7 +212,7 @@ function PerformDeleteAction(itemId) {
         var data = { objId: itemId };
         console.log(data);
         $.ajax({
-            url: '/TrainCourse/Delete',
+            url: '/CourseCalendar/Delete',
             type: "POST",
             contentType: 'application/x-www-form-urlencoded',
             headers: { 'RequestVerificationToken': verificationToken },
@@ -249,7 +249,7 @@ function PerformSignonAction(itemId) {
     var dataType = 'application/x-www-form-urlencoded';
     $.ajax({
         type: 'GET',
-        url: '/TrainCourse/SignUserToTerm',
+        url: '/CourseCalendar/SignUserToTerm',
         contentType: dataType,
         data: data,
         success: function (result) {
@@ -265,7 +265,7 @@ function PerformSignoffAction(itemId) {
     var dataType = 'application/x-www-form-urlencoded';
     $.ajax({
         type: 'GET',
-        url: '/TrainCourse/SignUserOffTerm',
+        url: '/CourseCalendar/SignUserOffTerm',
         contentType: dataType,
         data: data,
         success: function (result) {
@@ -345,7 +345,7 @@ function SendUpdateToController() {
     console.log('Submitting form...');
     $.ajax({
         type: 'POST',
-        url: '/TrainCourse/Update',
+        url: '/CourseCalendar/Update',
         dataType: 'json',
         contentType: dataType,
         headers: { 'RequestVerificationToken': verificationToken },

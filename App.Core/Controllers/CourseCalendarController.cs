@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Razor.Language;
 namespace App.Core.Controllers
 {
     [Authorize]
-    public class CourseCallendarController : Controller
+    public class CourseCalendarController : Controller
     {
         #region Fields
         private readonly ITrainCourseService _trainCourseService;
@@ -30,7 +30,7 @@ namespace App.Core.Controllers
         #endregion
 
         #region Constructor
-        public CourseCallendarController(ITrainCourseService trainCourseService,
+        public CourseCalendarController(ITrainCourseService trainCourseService,
                                     IUserActionService userActionService,
                                     IViewModelMapper<CourseViewModel, CourseModel> courseMapper,
                                     IViewModelMapper<UserViewModel, UserActionModel> userMapper,

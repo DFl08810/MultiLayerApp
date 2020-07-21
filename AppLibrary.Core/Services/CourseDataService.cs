@@ -12,15 +12,18 @@ using System.Text;
 
 namespace AppLibrary.Core.Services
 {
-    public class TrainCourseService : ITrainCourseService
+    public class CourseDataService : ITrainCourseService
     {
+        #region Fields
         private readonly IDataAccess<CourseDbModel> _courseDataAccess;
         private readonly IModelMapper<CourseModel, CourseDbModel> _modelMapper;
         private readonly IDataAccess<UserActionDbModel> _userDataAccess;
         private readonly IModelMapper<UserActionModel, UserActionDbModel> _userMapper;
         private readonly ITrainCalendarFactory _trainCalFactory;
+        #endregion
 
-        public TrainCourseService(IDataAccess<CourseDbModel> courseDataAccess,
+        #region Constructor
+        public CourseDataService(IDataAccess<CourseDbModel> courseDataAccess,
                                   IDataAccess<UserActionDbModel> userDataAccess,
                                   IModelMapper<CourseModel, CourseDbModel> modelMapper,
                                   IModelMapper<UserActionModel, UserActionDbModel> userMapper,
@@ -32,7 +35,12 @@ namespace AppLibrary.Core.Services
             this._userMapper = userMapper;
             this._trainCalFactory = trainCalendarFactory;
         }
+        #region
 
+        #region Utilities
+        #endregion
+
+        #region Methods
         public int Delete(int saveObjId)
         {
             _courseDataAccess.Delete(saveObjId);
@@ -60,7 +68,6 @@ namespace AppLibrary.Core.Services
             {
                 courseDownrangeList = courseDownrangeList.Where(isActive => isActive.IsOpened == true).ToList();
             }
-            //var courseModelList = _modelMapper.MapRangeUpwards(courseDownrangeList);
             
             var courseModelList = _trainCalFactory.CreateFullCourseList(courseDownrangeList);
             return courseModelList;
@@ -73,7 +80,6 @@ namespace AppLibrary.Core.Services
             var courseActionList = new List<UserActionModel>();
             courseActionList.Add(userActionModel);
 
-            //courseDbModel = _trainCalFactory.ConstructCourseForUpdate(courseDbModel, courseActionList);
 
             if (updateRelated)
             {
@@ -85,7 +91,6 @@ namespace AppLibrary.Core.Services
                     courseDbModel = _trainCalFactory.ConstructCourseForUpdate(courseDbModel, courseActionList);
                 else
                     return 1;
-                //var testResult = courseDbModel.UserActionModel.FirstOrDefault(search => search.UserName == userActionModel.UserName);
             }
 
             
@@ -127,7 +132,6 @@ namespace AppLibrary.Core.Services
             mappedCourse.CourseCurrentCapacity = mappedCourse.UserActionModel.Where(x => x.UserName != userActionObject.UserName).ToList().Count();
 
             mappedCourse.UserActionModel = mappedCourse.UserActionModel.Where(x => x.UserName == userActionObject.UserName).ToList();
-            //mappedCourse.CourseCurrentCapacity -= 1;
 
             mappedCourse.UserActionModel = mappedCourse.UserActionModel;
 
@@ -135,11 +139,9 @@ namespace AppLibrary.Core.Services
 
             courseForDb.UserActionModel = _userMapper.MapRangeDownwards(mappedCourse.UserActionModel);
 
-            //_courseDataAccess.DeleteRelated(courseForDb);
             var actionId = mappedCourse.UserActionModel.FirstOrDefault().Id;
             try
             {
-                //_userDataAccess.Delete(actionId);
                 _courseDataAccess.Update(courseForDb);
                 _courseDataAccess.Commint();
                 _courseDataAccess.DeleteRelated(courseForDb);
@@ -149,10 +151,9 @@ namespace AppLibrary.Core.Services
                 return 1;
             }
             _courseDataAccess.Commint();
-            //_userDataAccess.Commint();
-            //mappedCourse.UserActionModel == newUserList
 
             return 0;
         }
+        #endregion
     }
 }

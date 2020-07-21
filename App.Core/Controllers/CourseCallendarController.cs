@@ -23,7 +23,7 @@ namespace App.Core.Controllers
         #region Fields
         private readonly ITrainCourseService _trainCourseService;
         private readonly IUserActionService _userActionService;
-        private readonly IViewModelMapper<CourseViewModel, CourseModel> _modelMapper;
+        private readonly IViewModelMapper<CourseViewModel, CourseModel> _courseMapper;
         private readonly IViewModelMapper<UserViewModel, UserActionModel> _userMapper;
         private readonly ICourseViewFactory _courseFactory;
         private readonly UserManager<User> _userManager;
@@ -32,14 +32,14 @@ namespace App.Core.Controllers
         #region Constructor
         public CourseCallendarController(ITrainCourseService trainCourseService,
                                     IUserActionService userActionService,
-                                    IViewModelMapper<CourseViewModel, CourseModel> modelMapper,
+                                    IViewModelMapper<CourseViewModel, CourseModel> courseMapper,
                                     IViewModelMapper<UserViewModel, UserActionModel> userMapper,
                                     ICourseViewFactory courseFactory,
                                     UserManager<IdentityAuthLib.Models.User> userManager)
         {
             this._trainCourseService = trainCourseService;
             this._userActionService = userActionService;
-            this._modelMapper = modelMapper;
+            this._courseMapper = courseMapper;
             this._userMapper = userMapper;
             this._courseFactory = courseFactory;
             this._userManager = userManager;
@@ -72,7 +72,7 @@ namespace App.Core.Controllers
             foreach (var item in trainCourseList)
             {
                 //maps item from list to view model
-                var viewModel = _modelMapper.MapSingleUpwards(item);
+                var viewModel = _courseMapper.MapSingleUpwards(item);
                 //if user action is present in item, map it to view model
                 if (item.UserActionModel != null)
                 {
@@ -121,7 +121,7 @@ namespace App.Core.Controllers
                 //assignes creator of data request
                 data.CreatedBy = AuthorizedUser.UserName;
                 //map view data model to logic layer data model
-                var courseData = _modelMapper.MapSingleDownwards(data);
+                var courseData = _courseMapper.MapSingleDownwards(data);
                 //initialize User Action data model
                 var UserAction = new UserActionModel() { UserName = data.CreatedBy, AuthSystemIdentity = AuthorizedUser.Id };
                 //send data to database
@@ -145,7 +145,7 @@ namespace App.Core.Controllers
         {
             var courseModel = _trainCourseService.GetById(objId);
             //maps data to view model
-            var courseViewModel = _modelMapper.MapSingleUpwards(courseModel);
+            var courseViewModel = _courseMapper.MapSingleUpwards(courseModel);
             //pass to client as json
             return Json(courseViewModel);
         }
@@ -213,7 +213,7 @@ namespace App.Core.Controllers
 
                 var UserAction = new UserActionModel() { UserName = "test", AuthSystemIdentity = "full" };
 
-                var bindedCourseData = _modelMapper.MapSingleDownwards(data);
+                var bindedCourseData = _courseMapper.MapSingleDownwards(data);
                 _trainCourseService.Save(bindedCourseData, UserAction,true);
             }
             catch (Exception exc)

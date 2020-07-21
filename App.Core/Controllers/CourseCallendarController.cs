@@ -20,13 +20,16 @@ namespace App.Core.Controllers
     [Authorize]
     public class CourseCallendarController : Controller
     {
+        #region Fields
         private readonly ITrainCourseService _trainCourseService;
         private readonly IUserActionService _userActionService;
         private readonly IViewModelMapper<CourseViewModel, CourseModel> _modelMapper;
         private readonly IViewModelMapper<UserViewModel, UserActionModel> _userMapper;
         private readonly ICourseViewFactory _courseFactory;
         private readonly UserManager<User> _userManager;
+        #endregion
 
+        #region Constructor
         public CourseCallendarController(ITrainCourseService trainCourseService,
                                     IUserActionService userActionService,
                                     IViewModelMapper<CourseViewModel, CourseModel> modelMapper,
@@ -41,6 +44,7 @@ namespace App.Core.Controllers
             this._courseFactory = courseFactory;
             this._userManager = userManager;
         }
+        #endregion
 
         #region Utilities
         private async Task<UserActionModel> ProcessActionForUserControl(int id)
@@ -95,7 +99,7 @@ namespace App.Core.Controllers
             #region DateValidation
             DateTime parsedDate;
             string pattern = "d.M.yyyy H:m:s";
-            //checks if datetime stamp is parsable, if not return error to client
+            //checks if datetime stamp is parsable, if not, return error to client
             var isValidDateTime = DateTime.TryParseExact(data.FriendlyCourseDate, pattern, null, DateTimeStyles.None, out parsedDate);
             if (!isValidDateTime)
             {

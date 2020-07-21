@@ -42,6 +42,20 @@ namespace App.Core.Controllers
             this._userManager = userManager;
         }
 
+        #region Utilities
+        private async Task<UserActionModel> ProcessActionForUserControl(int id)
+        {
+            var AuthorizedUser = await _userManager.GetUserAsync(User);
+
+            var courseModel = _trainCourseService.GetById(id);
+
+            var UserAction = new UserActionModel() { UserName = AuthorizedUser.UserName, AuthSystemIdentity = AuthorizedUser.Id, Course = courseModel };
+
+            return UserAction;
+        }
+        #endregion
+
+        #region Methods
         #region IndexActions
         [Authorize(Roles = App.Core.AuthInfrastructure.Role.Admin)]
         public IActionResult Index()
@@ -132,7 +146,7 @@ namespace App.Core.Controllers
             return Json(courseViewModel);
         }
 
-        //Client
+        //Deletes single course by id
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int objId)
@@ -145,6 +159,7 @@ namespace App.Core.Controllers
             #region DatabasAccess
             try
             {
+                //deletes course with id
                 var obj = _trainCourseService.Delete(objId);
             }
             catch (Exception exc)
@@ -209,52 +224,55 @@ namespace App.Core.Controllers
         }
         #endregion
 
+        //view controller for users
         public async Task<IActionResult> CourseUserControl()
         {
+            //retrieves current user using view
             var AuthorizedUser = await _userManager.GetUserAsync(User);
+            //Initialize user action data model 
             var UserAction = new UserActionModel() { UserName = AuthorizedUser.UserName, AuthSystemIdentity = AuthorizedUser.Id };
 
+            //call course service, true parameter specifies only courses opened for registration
             var trainCourseList = _trainCourseService.GetRange(true);
+            //calls factory method that combine current user with list. This is done so user can sign off or sign on without duplicites.
             var trainCourseMapped = _courseFactory.CreateCourseForUserAction(trainCourseList, UserAction);
             return View(trainCourseMapped);
         }
 
+        //Client JScript calls this to add user to course specified by id
         [HttpGet]
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> SignUserToTerm(int objId)
         {
-            var AuthorizedUser = await _userManager.GetUserAsync(User);
-
-            var courseModel = _trainCourseService.GetById(objId);
-
-            var UserAction = new UserActionModel() { UserName = AuthorizedUser.UserName, AuthSystemIdentity = AuthorizedUser.Id, Course = courseModel };
-
-            var actionStatus = _trainCourseService.Save(courseModel, UserAction, true, true);
-
+            //method that prepares objets from database
+            UserActionModel UserAction = await ProcessActionForUserControl(objId);
+            //calls service for saving, params true true specifies update process and update related records respectively
+            var actionStatus = _trainCourseService.Save(UserAction.Course, UserAction, true, true);
+            //if returned value is 0, return success
             if(actionStatus == 0)
                 return StatusCode(200);
             else
                 return StatusCode(500);
         }
 
+        //Client JScript calls this to remove user from course specified by id
         [HttpGet]
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> SignUserOffTerm(int objId)
         {
-            var AuthorizedUser = await _userManager.GetUserAsync(User);
-
-            var courseModel = _trainCourseService.GetById(objId);
-
-            var UserAction = new UserActionModel() { UserName = AuthorizedUser.UserName, AuthSystemIdentity = AuthorizedUser.Id, Course = courseModel };
-
+            //method that prepares objets from database
+            UserActionModel UserAction = await ProcessActionForUserControl(objId);
+            //calls service for deletion related user signed to course term
             var actionStatus = _trainCourseService.DeleteRelatedUser(objId, UserAction);
-
+            //if returned value is 0, return success
             if (actionStatus == 0)
                 return StatusCode(200);
             else
                 return StatusCode(500);
         }
 
+
+        #endregion
 
     }
 }

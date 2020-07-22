@@ -12,12 +12,13 @@
     <title>@ViewData["Title"] - App.Core</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/MainScheme.css" />
     @RenderSection("ViewStyles", required: false)
     @RenderSection("HeaderScripts", required: false)
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-crafty bg-white navbar-dark box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">App.Core</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -28,22 +29,22 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-menu-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         @if (User.IsInRole(App.Core.AuthInfrastructure.Role.Admin))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="TrainCourse" asp-action="Index">Calendar</a>
+                                <a class="nav-link text-menu-light" asp-area="" asp-controller="CourseCalendar" asp-action="Index">Calendar</a>
                             </li>
                         }
                         @if (User.IsInRole(App.Core.AuthInfrastructure.Role.User))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="TrainCourse" asp-action="CourseUserControl">Calendar</a>
+                                <a class="nav-link text-menu-light" asp-area="" asp-controller="CourseCalendar" asp-action="CourseUserControl">Calendar</a>
                             </li>
                         }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-menu-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
                 </div>
@@ -56,7 +57,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer text-muted">
         <div class="container">
             &copy; 2020 - App.Core - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>

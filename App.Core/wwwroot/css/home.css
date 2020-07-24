@@ -58,3 +58,17 @@
     max-height: 100%;
     overflow: hidden;
 }
+
+.terms-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: stretch;
+    align-content: flex-start;
+    width: 100%;
+}
+
+.terms-container .card {
+    color: black;
+}

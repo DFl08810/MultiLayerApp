@@ -30,6 +30,7 @@
   <ItemGroup>
     <Folder Include="Exchange\" />
     <Folder Include="wwwroot\lib\particlesJs\" />
+    <Folder Include="wwwroot\img\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -10,6 +10,8 @@ using System.Text;
 
 namespace AppLibrary.Core.Factories
 {
+    //these factories are used for constructing objects in logic layer
+    //they abstract mapping process
     public class TrainCalendarFactory : ITrainCalendarFactory
     {
         private readonly IDataAccess<CourseDbModel> _courseDataAccess;

@@ -2,6 +2,7 @@
 .card {
     margin-top: 20px;
     margin-bottom: 10px;
+    color: black;
 }
 
     .card .card-header {
@@ -125,3 +126,11 @@
     .modal-dialog .modal-body .container #capacityField {
         width: 15%;
     }
+
+.modal-title {
+    color: black;
+}
+
+.controlRow {
+    color: black;
+}

@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace App.Core.Data
 {
+    //Custom object mapper
+    //Maps models between this layer nad AppLibrary.Core in logic layer
     public class CourseViewDataMap : IViewModelMapper<CourseViewModel, CourseModel>
     {
         public CourseModel MapSingleDownwards(CourseViewModel singleModel)

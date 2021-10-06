@@ -15,6 +15,8 @@ namespace AppLibrary.Core.Services
         private IModelMapper<CourseModel, CourseDbModel> _modelMapper;
         private readonly IModelMapper<UserActionModel, UserActionDbModel> _userMapper;
 
+
+        //constructor with dependency injection
         public UserActionService(IDataAccess<UserActionDbModel> userActionDataAccess,
                                   IModelMapper<CourseModel, CourseDbModel> modelMapper,
                                   IModelMapper<UserActionModel, UserActionDbModel> userMapper)
@@ -24,6 +26,7 @@ namespace AppLibrary.Core.Services
             this._userMapper = userMapper;
         }
 
+        //save user action
         public int Save(UserActionModel userAction)
         {
             var mappedCourse = _modelMapper.MapSingleDownwards(userAction.Course);

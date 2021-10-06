@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Core.AuthInfrastructure;
 using App.Core.Data;
 using App.Core.Data.Interfaces;
 using App.Core.Factories;
@@ -63,6 +64,9 @@ namespace App.Core
             services.AddRazorPages();
         }
 
+        //Test
+
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -84,6 +88,7 @@ namespace App.Core
             app.UseAuthentication();
             app.UseAuthorization();
 
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -91,6 +96,7 @@ namespace App.Core
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+            
         }
     }
 }

@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace App.Core.Data
 {
+    //Custom object mapper
+    //Maps models between this layer nad AppLibrary.Core in logic layer
+
     public class UserActionViewModelMap : IViewModelMapper<UserViewModel, UserActionModel>
     {
         public IEnumerable<UserActionModel> MapRangeDownwards(IEnumerable<UserViewModel> modelRange)

@@ -7,6 +7,8 @@ using System.Text;
 
 namespace AppLibrary.Core.Data
 {
+    //These mappers map between logic layer data model and data access layer
+
     public class UserActionDataMap : IModelMapper<UserActionModel, UserActionDbModel>
     {
         public IEnumerable<UserActionDbModel> MapRangeDownwards(IEnumerable<UserActionModel> modelRange)
